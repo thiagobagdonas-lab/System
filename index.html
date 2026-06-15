@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anthropic Stack — Briefing Executivo | Setter Investimentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo-mark" aria-label="Anthropic">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M13.827 3.52h3.603L24 20h-3.603l-1.397-3.546h-5.892L11.711 20H8.108L13.827 3.52zM18.176 13.46l-2.078-5.298-2.078 5.298h4.156zM0 20l5.719-16.48h3.522L3.522 20H0z"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="brand-title">Anthropic Stack</div>
+      <div class="brand-sub">Briefing Executivo · Setter</div>
+    </div>
+  </div>
+  <nav class="topnav">
+    <a href="#overview">Produtos</a>
+    <a href="#concepts">Conceitos</a>
+    <a href="#environments">Execução</a>
+    <a href="#multi-agent">Multi-Agente</a>
+    <a href="#security">Segurança</a>
+    <a href="#financial">Financial</a>
+    <a href="#sharing">Distribuir</a>
+    <a href="#mcp-server">MCP Server</a>
+    <a href="#decision">Decisão</a>
+    <a href="#glossary">Glossário</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Junho 2026</div>
+    <h1>Como adotar o Claude com segurança.</h1>
+    <p class="hero-lead">
+      Este briefing consolida os três ambientes de execução — <strong>Chat</strong>, <strong>Cowork</strong> e <strong>Code</strong> — e como <strong>Projects + Skills</strong> se encaixam para padronizar o time. Onde o código executa, qual o nível de isolamento, e como distribuir scripts para analistas sem expor a operação.
+    </p>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hc-label">Pergunta central</div>
+        <div class="hc-text">Qual ambiente usar para cada caso, sabendo que <em>o código sairá da minha máquina e rodará nos analistas</em>?</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Recomendação</div>
+        <div class="hc-text"><strong>Claude Code</strong> com sandbox para desenvolvimento, <strong>Code na Web</strong> para execução crítica em analistas (VM descartável + repo auditado = trilha defensável), <strong>Projects + Skills</strong> para padronizar o time.</div>
+      </div>
+      <div class="hero-card warn">
+        <div class="hc-label">Risco crítico hoje</div>
+        <div class="hc-text">Cowork <strong>não gera audit log</strong> em nenhum plano — incluindo Enterprise. <em>Não use para fluxos regulados.</em></div>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Baseado na documentação oficial Anthropic, GitHub anthropics/claude-code e PromptArmor</span>
+      <a href="#summary" class="hero-cta">Pular para o sumário executivo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 — VISÃO GERAL DOS 4 PRODUTOS ============ -->
+<section id="overview" class="section">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2>Os quatro produtos · panorama em 30 segundos</h2>
+    <p class="section-sub">Mesmo modelo Claude por trás. O que muda é <em>onde</em> o agente executa e <em>o que</em> ele acessa. Detalhes aprofundados nas próximas seções.</p>
+  </div>
+
+  <div class="env-grid">
+    <div class="env-card env-chat">
+      <div class="env-mono">I</div>
+      <h3>Claude Chat</h3>
+      <div class="env-pill">Web · Mobile · Desktop</div>
+      <p>Conversa de uso geral. Executa código apenas no sandbox da Anthropic (artifacts).</p>
+      <ul>
+        <li>Para: qualquer usuário</li>
+        <li>Execução: infra Anthropic</li>
+        <li>Acesso local: nenhum</li>
+      </ul>
+    </div>
+
+    <div class="env-card env-cowork">
+      <div class="env-mono">II</div>
+      <h3>Claude Cowork</h3>
+      <div class="env-pill">App desktop · híbrido</div>
+      <p>Voltado a analistas. Roda em VM Linux local <strong>+</strong> loop de execução também no host (fora da VM) para arquivos e MCP.</p>
+      <ul>
+        <li>Para: áreas de negócio</li>
+        <li>Execução: VM local persistente</li>
+        <li>Acesso local: pasta conectada</li>
+      </ul>
+    </div>
+
+    <div class="env-card env-code">
+      <div class="env-mono">III</div>
+      <h3>Claude Code</h3>
+      <div class="env-pill">CLI · Desktop · Web</div>
+      <p>Para devs. Acesso direto ao OS; isolamento opt-in via sandbox/Docker; VM gerenciada na versão Web.</p>
+      <ul>
+        <li>Para: desenvolvedores</li>
+        <li>Execução: OS direto ou VM</li>
+        <li>Acesso local: total (sem sandbox)</li>
+      </ul>
+    </div>
+
+    <div class="env-card env-projects">
+      <div class="env-mono">IV</div>
+      <h3>Projects</h3>
+      <div class="env-pill">Funcionalidade transversal</div>
+      <p>Espaço persistente com instruções, arquivos, memória e histórico. <em>Não é ambiente de execução</em> — é onde o contexto se acumula.</p>
+      <ul>
+        <li>Para: times recorrentes</li>
+        <li>Persistência: arquivos + memória</li>
+        <li>Compartilha: Team/Enterprise</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 — CONCEITOS FUNDAMENTAIS ============ -->
+<section id="concepts" class="section dark">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2>Conceitos fundamentais · clique para expandir</h2>
+    <p class="section-sub">Os blocos que se combinam em uma adoção corporativa. Skills, Projects, Sub-agents, Connectors, Plugins, MCP.</p>
+  </div>
+
+  <div class="accordion">
+    <details open class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">SKILL</span>
+        <span class="acc-title">"Como fazer" — procedimento reutilizável</span>
+      </summary>
+      <div class="acc-body">
+        <p>Arquivo <code>SKILL.md</code> com instruções, conhecimento de domínio e gatilhos que ensinam Claude a executar um workflow específico de forma <strong>repetível</strong>. Funciona como um POP corporativo.</p>
+        <ul>
+          <li>Carregam contexto apenas quando relevante (evita "context rot")</li>
+          <li>Movem o Claude de "sugestivo" para "determinístico"</li>
+          <li>Globais — não ficam presas a um projeto</li>
+          <li>Em março/2026 viraram <strong>padrão aberto</strong>: <code>agentskills.io</code> — Atlassian, Figma, Stripe, Notion, Zapier</li>
+          <li>Incluídas em Max, Pro, Team e Enterprise sem custo adicional</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">PROJECT</span>
+        <span class="acc-title">"Onde trabalhar" — espaço persistente do time</span>
+      </summary>
+      <div class="acc-body">
+        <p>Espaço de trabalho em torno de um assunto: documentos, instruções customizadas (system prompt), memória e histórico de conversas — tudo no mesmo lugar.</p>
+        <ul>
+          <li>Contexto sempre disponível — analista não parte do zero</li>
+          <li>Arquivos de referência: brand book, glossário, exemplos passados</li>
+          <li>Team/Enterprise: compartilhamento e controle de permissões (usar × editar)</li>
+          <li>Enterprise: <strong>isolamento entre projetos</strong> — útil para separar clientes/mesas</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">PLUGIN</span>
+        <span class="acc-title">Skill empacotada com Connectors e Sub-agents</span>
+      </summary>
+      <div class="acc-body">
+        <p>Um Plugin agrupa três elementos:</p>
+        <ul>
+          <li><strong>Skills</strong> — instruções e conhecimento de domínio</li>
+          <li><strong>Connectors</strong> — acesso governado a dados externos (FactSet, Google Drive, Slack…)</li>
+          <li><strong>Sub-agents</strong> — instâncias Claude adicionais para subtarefas</li>
+        </ul>
+        <p>A <em>skill (instruções)</em> funciona igual em Chat, Cowork e Code. Já <em>sub-agents e hooks</em> têm restrições — só funcionam plenamente no Claude Code (matriz na Seção 04).</p>
+      </div>
+    </details>
+
+    <details class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">SUB-AGENT</span>
+        <span class="acc-title">Instância Claude separada para uma subtarefa</span>
+      </summary>
+      <div class="acc-body">
+        <p>Instância Claude isolada com contexto próprio que recebe uma tarefa, executa e retorna apenas o resultado final ao agente principal.</p>
+        <ul>
+          <li><strong>Uso ideal:</strong> tarefas independentes que não precisam se comunicar</li>
+          <li><strong>Vantagem:</strong> protege o contexto principal; exploração fica na "bolha"</li>
+          <li><strong>Custo:</strong> workflows multi-agente consomem <strong>4–7× mais tokens</strong> que sessão de agente único</li>
+          <li>A partir do Claude Code <strong>v2.1.172 (10/jun/2026)</strong>: aninhamento até <strong>5 níveis</strong></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">CONNECTOR · MCP</span>
+        <span class="acc-title">Como Claude acessa dados externos com governança</span>
+      </summary>
+      <div class="acc-body">
+        <p><strong>Connectors</strong> são integrações governadas: FactSet, Google Drive, Slack, S&P, Daloopa, Moody's. Implementados via <strong>MCP</strong> (Model Context Protocol).</p>
+        <p><strong>MCP Gateway</strong> é o padrão corporativo: um proxy central que detém as credenciais. O agente do analista chama o gateway sem nunca ver a chave da API — auditável e revogável.</p>
+        <p class="mini-warn">Nunca colocar API keys ou credenciais raw em arquivos do projeto que serão distribuídos.</p>
+      </div>
+    </details>
+
+    <details class="acc-item">
+      <summary>
+        <span class="acc-eyebrow">DYNAMIC WORKFLOWS</span>
+        <span class="acc-title">Centenas de sub-agents paralelos por sessão (Opus 4.8, mai/2026)</span>
+      </summary>
+      <div class="acc-body">
+        <p>Permite que Claude planeje uma tarefa, dispare múltiplos sub-agents paralelos e verifique resultados antes de entregar.</p>
+        <ul>
+          <li>Limite atual: <strong>16 agentes concorrentes</strong>, <strong>1.000 agentes por execução total</strong></li>
+          <li>Disponível em Claude Code (research preview) — planos Enterprise, Team e Max</li>
+          <li>Cowork: ainda não disponível</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 03 — ONDE EXECUTA E NÍVEL DE ISOLAMENTO ============ -->
+<section id="environments" class="section">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2>Onde o código executa · matriz consolidada</h2>
+    <p class="section-sub">A única seção que você precisa para entender risco de execução. Clique nas abas para o detalhamento por ambiente.</p>
+  </div>
+
+  <!-- TABELA RESUMO -->
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Onde executa</th>
+        <th>Filesystem</th>
+        <th>Rede</th>
+        <th>Persistência</th>
+        <th>Nível de risco</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Chat</strong></td>
+        <td>Sandbox isolado da Anthropic</td>
+        <td class="muted">Sem acesso</td>
+        <td>Apenas API Anthropic</td>
+        <td class="muted">Nenhuma</td>
+        <td><span class="risk-tag risk-low">Baixo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Code na Web</strong></td>
+        <td>VM Anthropic descartável</td>
+        <td>Apenas repo clonado</td>
+        <td>Proxy com allowlist</td>
+        <td class="good">Descartada por sessão</td>
+        <td><span class="risk-tag risk-low">Baixo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cowork</strong></td>
+        <td>VM Ubuntu 22.04 local + host</td>
+        <td>Pasta do host montada na VM</td>
+        <td>Proxy com allowlist configurável</td>
+        <td class="warn">VM persiste entre sessões</td>
+        <td><span class="risk-tag risk-medium">Médio</span></td>
+      </tr>
+      <tr>
+        <td><strong>Code (Local)</strong></td>
+        <td>OS do usuário, mesmas permissões</td>
+        <td class="bad">Total por padrão</td>
+        <td class="bad">Irrestrita por padrão</td>
+        <td class="bad">Permanente</td>
+        <td><span class="risk-tag risk-high">Alto sem sandbox</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TABS DETALHADAS -->
+  <h3 class="sub-h3">Detalhamento por ambiente</h3>
+  <div class="exec-tabs">
+    <button class="tab-btn active" data-tab="chat">Chat</button>
+    <button class="tab-btn" data-tab="cowork">Cowork</button>
+    <button class="tab-btn" data-tab="code-local">Code (Local)</button>
+    <button class="tab-btn" data-tab="code-web">Code na Web</button>
+    <button class="tab-btn" data-tab="code-remote">Code Desktop · Remote/SSH</button>
+  </div>
+
+  <div class="tab-panels">
+
+    <div class="tab-panel active" id="tab-chat">
+      <div class="panel-grid">
+        <div>
+          <h4>Onde roda</h4>
+          <ul class="risk-list">
+            <li>Sandbox isolado gerenciado pela Anthropic (tecnologia gVisor da Google para isolamento kernel-level)</li>
+            <li>Apenas ferramentas restritas: <em>artifacts</em> (JavaScript em iframe) e <em>analysis tool</em> (Python)</li>
+            <li>Sem acesso ao sistema operacional do usuário</li>
+          </ul>
+          <h4>Orquestração de agentes</h4>
+          <ul class="risk-list">
+            <li>Não existe orquestração real no Chat</li>
+            <li>Skills funcionam apenas como instruções</li>
+            <li>Sub-agents nativos via plugin ficam desabilitados na interface</li>
+          </ul>
+        </div>
+        <div>
+          <h4>"É 100% seguro rodar código desconhecido?"</h4>
+          <ul class="risk-list">
+            <li class="good">Sua máquina está protegida — código não escapa do sandbox</li>
+            <li class="warn">Mas <strong>não é absolutamente seguro</strong>: sandboxes têm escapes documentados (CVEs raros mas reais)</li>
+            <li class="bad">O script pode <strong>ler tudo que está naquela conversa</strong> — arquivos enviados, dados colados, contexto</li>
+            <li class="bad">Pode tentar chamadas de rede (limitadas mas existentes em artifacts)</li>
+            <li class="bad">Output pode conter prompt injection que manipula o resto da conversa</li>
+          </ul>
+          <h4>Regra prática</h4>
+          <ul class="risk-list">
+            <li>Para código desconhecido: usar sessão limpa, sem upload de arquivos sensíveis</li>
+            <li>Não colar dados confidenciais antes nem depois</li>
+            <li>Validar o output manualmente — não confiar no resultado cegamente</li>
+            <li>Audit log: parcial (não defensável para fluxo regulado)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-cowork">
+      <div class="panel-grid">
+        <div>
+          <h4>Dois ambientes simultâneos</h4>
+          <ul class="risk-list">
+            <li class="good"><strong>Dentro da VM (isolado):</strong> bash, pip/npm install, scripts, compilação</li>
+            <li class="good">Ubuntu 22.04 via Apple Virtualization Framework (macOS) ou Hyper-V (Windows)</li>
+            <li class="bad"><strong>Fora da VM (sem sandbox):</strong> leitura/escrita nas pastas conectadas via VirtioFS</li>
+            <li class="bad">Web fetches, MCP servers locais e Computer Use também rodam no host</li>
+          </ul>
+          <h4>VirtioFS — como o arquivo "sai" da VM</h4>
+          <div class="diagram">
+            <code>VM Linux (Ubuntu 22.04)<br />
+            └── /mnt/.virtiofs-root/shared/pasta-do-usuario/<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↕ VirtioFS (bidirecional)<br />
+            Host (macOS / Windows)<br />
+            └── ~/pasta-do-usuario/   ← arquivo aparece aqui</code>
+          </div>
+          <ul class="risk-list">
+            <li>Output do script aparece <strong>instantaneamente</strong> na pasta do host</li>
+            <li>Não há etapa de cópia ou transferência manual</li>
+          </ul>
+        </div>
+        <div>
+          <h4>O que código malicioso pode (e não pode) fazer</h4>
+          <table class="mini-table">
+            <tr><td>Ler/escrever na pasta conectada</td><td class="bad">✓ Sim</td></tr>
+            <tr><td>Enviar dados para servidor externo</td><td class="warn">✓ (sujeito a egress)</td></tr>
+            <tr><td>Acessar SSH keys, ~/.aws, ~/.ssh</td><td class="good">✕ Se fora da pasta</td></tr>
+            <tr><td>Acessar outros diretórios</td><td class="good">✕ Bloqueado pela VM</td></tr>
+            <tr><td>Persistir entre sessões</td><td class="bad">✓ VM não é descartada</td></tr>
+          </table>
+          <h4>Vulnerabilidades estruturais</h4>
+          <ul class="risk-list">
+            <li class="bad">Sem audit log em nenhum plano (incluindo Enterprise)</li>
+            <li class="bad">EDR / DLP / SIEM corporativos não enxergam a VM</li>
+            <li class="bad">Computer Use roda no host — sem sandbox algum</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-code-local">
+      <div class="panel-grid">
+        <div>
+          <h4>Onde roda</h4>
+          <p>Direto no OS, com as permissões do usuário. <strong>Sem isolamento por padrão</strong>.</p>
+          <h4>Isolamento opt-in</h4>
+          <table class="mini-table">
+            <tr><th>Opção</th><th>Plataforma</th><th>Docker?</th></tr>
+            <tr><td><code>/sandbox</code> Seatbelt</td><td>macOS</td><td>Não</td></tr>
+            <tr><td><code>/sandbox</code> bubblewrap+socat</td><td>Linux/WSL2</td><td>Não (2 pacotes)</td></tr>
+            <tr><td><code>/sandbox</code> nativo</td><td class="bad">Windows nativo</td><td class="bad">Não suportado</td></tr>
+            <tr><td>DevContainer</td><td>Cross</td><td>Sim</td></tr>
+            <tr><td>Docker Sandbox (microVM)</td><td>macOS/Windows</td><td>Sim</td></tr>
+          </table>
+          <p class="mini-warn">No Windows nativo o sandbox <code>/sandbox</code> não funciona — use <strong>Docker</strong>.</p>
+        </div>
+        <div>
+          <h4>Camadas de controle</h4>
+          <ul class="risk-list">
+            <li>Permissões Allow/Ask/Deny por ferramenta — contornável via shell</li>
+            <li>Sandbox kernel-level (opt-in)</li>
+            <li>Hooks PreToolUse — inspeciona e bloqueia operações</li>
+            <li class="good">Audit log disponível no plano Enterprise</li>
+          </ul>
+          <h4>CVEs documentadas</h4>
+          <div class="cve-card">
+            <div class="cve-badge">CVE-2025-59536</div>
+            <div class="cve-score">CVSS 8.8</div>
+            <p>Código em projeto não-confiável executava antes do prompt de confiança. <strong>Corrigida</strong> nas versões do Claude Code lançadas após nov/2025 — manter sempre atualizado.</p>
+          </div>
+          <div class="cve-card">
+            <div class="cve-badge">CVE-2026-21852</div>
+            <div class="cve-score">CVSS 5.3</div>
+            <p>Repositórios maliciosos podiam exfiltrar API keys via arquivos de configuração. <strong>Corrigida</strong> em fev/2026 — manter <code>claude-code</code> em versão recente é mitigação suficiente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-code-web">
+      <div class="panel-grid">
+        <div>
+          <h4>VM Anthropic descartável</h4>
+          <ul class="risk-list">
+            <li class="good">VM isolada gerenciada pela Anthropic</li>
+            <li class="good">Descartada ao encerrar a sessão — sem resíduo na máquina</li>
+          </ul>
+          <h4>Pré-requisitos</h4>
+          <ul class="risk-list">
+            <li>Repositório no GitHub conectado</li>
+            <li>Código precisa estar commitado — não aceita scripts colados</li>
+          </ul>
+          <h4>Pré-instalado na VM</h4>
+          <ul class="risk-list">
+            <li>Linguagens: Python 3.x, Node.js 20/21/22, Ruby, PHP, Java, Go, Rust, C/C++</li>
+            <li>Bancos: PostgreSQL 16, Redis 7.0</li>
+            <li>Infra: Docker, git, utilitários comuns</li>
+            <li>Acesso padrão a PyPI, npm, RubyGems, crates.io</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Limites importantes</h4>
+          <ul class="risk-list">
+            <li>Timeout bash: <strong>2 minutos</strong> (configurável via <code>BASH_MAX_TIMEOUT_MS</code>)</li>
+            <li>Janela de uso: <strong>5 horas de uso ativo a cada 5 horas (cota rolante)</strong>, compartilhada com Chat e Cowork no mesmo plano</li>
+            <li class="bad">Não adequado para processos contínuos de longa duração</li>
+          </ul>
+          <h4>Quando usar</h4>
+          <ul class="risk-list">
+            <li class="good">Scripts críticos que acessam dados sensíveis</li>
+            <li class="good">Fluxos que precisam de rastreabilidade</li>
+            <li class="good">VM descartável + repo auditado = trilha defensável</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-code-remote">
+      <div class="panel-grid">
+        <div>
+          <h4>Aba "Code" do app desktop · três modos</h4>
+          <table class="mini-table">
+            <tr><th>Modo</th><th>Onde executa</th></tr>
+            <tr><td><strong>Local</strong></td><td>Sua máquina, sem isolamento</td></tr>
+            <tr><td><strong>Remote</strong></td><td>VM Anthropic (mesma do Code na Web)</td></tr>
+            <tr><td><strong>SSH</strong></td><td>Sua máquina remota (VPS, servidor próprio)</td></tr>
+          </table>
+        </div>
+        <div>
+          <h4>Aviso: "Remote Control" ≠ "Code na Web"</h4>
+          <ul class="risk-list">
+            <li>Remote Control é uma <strong>janela web/mobile</strong> para sua sessão local</li>
+            <li>A execução continua na sua máquina — sem isolamento adicional</li>
+            <li>Parece remoto, mas roda local</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARAÇÃO VISUAL DE ISOLAMENTO -->
+  <h3 class="sub-h3">Comparação visual de isolamento</h3>
+  <div class="isolation-grid">
+    <div class="iso-card iso-none">
+      <div class="iso-name">Code CLI / Desktop Local</div>
+      <div class="iso-status">Sem isolamento</div>
+      <ul>
+        <li>Acessa todo o filesystem do usuário</li>
+        <li>Rede irrestrita</li>
+      </ul>
+    </div>
+    <div class="iso-card iso-full">
+      <div class="iso-name">Code na Web (VM Anthropic)</div>
+      <div class="iso-status">Isolamento total</div>
+      <ul>
+        <li>VM descartada por sessão</li>
+        <li>Acesso apenas ao repo</li>
+        <li>Sem resíduo no host</li>
+      </ul>
+    </div>
+    <div class="iso-card iso-partial">
+      <div class="iso-name">Claude Cowork</div>
+      <div class="iso-status">Isolamento parcial</div>
+      <ul>
+        <li>Scripts e deps: dentro da VM</li>
+        <li>Arquivos / MCP: fora da VM</li>
+        <li>Computer Use: sem sandbox</li>
+        <li>VM persiste entre sessões</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 — MULTI-AGENTE ============ -->
+<section id="multi-agent" class="section dark">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2>Arquitetura multi-agente · onde funciona de verdade</h2>
+    <p class="section-sub">Opus orquestra, Sonnet analisa, Haiku busca. Mas só o Claude Code respeita essa escolha.</p>
+  </div>
+
+  <!-- MATRIZ DE CAPACIDADES -->
+  <table class="comp-table wide">
+    <thead>
+      <tr><th>Componente</th><th>Chat</th><th>Cowork</th><th>Claude Code</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Skills (instruções)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Connectors externos</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Sub-agents via plugin</td><td class="no">desabilitado</td><td class="warn">⚠ forçados a Haiku (bug)</td><td class="yes">controle total</td></tr>
+      <tr><td>Hooks de sessão</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+      <tr><td>Aninhamento (até 5 níveis)</td><td class="no">—</td><td class="warn">limitado</td><td class="yes">✓ desde v2.1.172</td></tr>
+      <tr><td>Dynamic Workflows</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ (research preview)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROTEAMENTO DE MODELOS -->
+  <h3 class="sub-h3">Roteamento por custo × qualidade</h3>
+  <div class="routing-grid">
+    <div class="route-card route-opus">
+      <div class="route-name">Opus</div>
+      <div class="route-role">Orquestrador · síntese final</div>
+      <p>Raciocínio complexo, coordenação entre sub-agents, decisão.</p>
+    </div>
+    <div class="route-card route-sonnet">
+      <div class="route-name">Sonnet</div>
+      <div class="route-role">Análise · escrita</div>
+      <p>Equilíbrio qualidade × custo para tarefas intermediárias.</p>
+    </div>
+    <div class="route-card route-haiku">
+      <div class="route-name">Haiku</div>
+      <div class="route-role">Busca · exploração</div>
+      <p>Velocidade e baixo custo para varredura e tarefas simples.</p>
+    </div>
+  </div>
+
+  <div class="resolution-card">
+    <h4>Ordem de resolução de modelo no Claude Code</h4>
+    <ol>
+      <li>Variável de ambiente <code>CLAUDE_CODE_SUBAGENT_MODEL</code> (se definida)</li>
+      <li>Parâmetro <code>model</code> passado na invocação</li>
+      <li>Campo <code>model:</code> no frontmatter do agente</li>
+      <li>Padrão: herda o modelo da sessão principal (<code>inherit</code>)</li>
+    </ol>
+  </div>
+
+  <!-- ANINHAMENTO -->
+  <h3 class="sub-h3">Aninhamento de sub-agents (até 5 níveis)</h3>
+  <div class="nest-diagram">
+    <div class="nest-line nest-l0">Sessão principal <span class="nest-model nest-opus">Opus</span></div>
+    <div class="nest-line nest-l1">└── Sub-agent nível 1 <span class="nest-model nest-sonnet">Sonnet</span> · orquestração</div>
+    <div class="nest-line nest-l2">&nbsp;&nbsp;&nbsp;&nbsp;├── Sub-agent nível 2 <span class="nest-model nest-haiku">Haiku</span> · busca rápida</div>
+    <div class="nest-line nest-l2">&nbsp;&nbsp;&nbsp;&nbsp;├── Sub-agent nível 2 <span class="nest-model nest-haiku">Haiku</span> · busca rápida</div>
+    <div class="nest-line nest-l2">&nbsp;&nbsp;&nbsp;&nbsp;└── Sub-agent nível 2 <span class="nest-model nest-sonnet">Sonnet</span> · análise</div>
+    <div class="nest-line nest-l3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Sub-agent nível 3 <span class="nest-model nest-haiku">Haiku</span> · verificação</div>
+  </div>
+
+  <!-- BUG -->
+  <div class="bug-card">
+    <div class="bug-head">
+      <div class="bug-badge">BUG · GitHub Issue #47488 · ABERTO</div>
+      <h3>No Cowork, todo sub-agent é silenciosamente forçado para Haiku</h3>
+    </div>
+    <div class="bug-body">
+      <div>
+        <h4>Causa raiz</h4>
+        <ul>
+          <li>O Electron host do Claude Desktop injeta <code>CLAUDE_CODE_SUBAGENT_MODEL=claude-haiku-4-5-20251001</code> em todo subprocess CLI</li>
+          <li>A variável de ambiente sobrescreve qualquer escolha do usuário</li>
+          <li>Campo <code>defaultSubagentModel</code> existe no schema mas nunca recebe valor</li>
+        </ul>
+        <h4>Afeta</h4>
+        <ul>
+          <li>Parâmetro <code>model</code> na tool Agent/Task</li>
+          <li>Campo <code>model:</code> no frontmatter dos agentes</li>
+          <li>Estado do comando <code>/model</code></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Impacto prático</h4>
+        <ul>
+          <li>Skills desenhadas com Opus + Sonnet <strong>rodam tudo em Haiku</strong></li>
+          <li>Resultado visivelmente inferior em raciocínio complexo</li>
+          <li>Sem nenhum aviso ao usuário</li>
+        </ul>
+        <h4>Status</h4>
+        <ul>
+          <li>Presente desde o lançamento (março/2026)</li>
+          <li>Sem assignee, sem milestone, sem PR de fix visível</li>
+          <li>Confirmado em Windows, Max 5× e Max 20×</li>
+          <li>Fix é pequeno: falta apenas um writer para <code>defaultSubagentModel</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cost-card">
+    <h4>Custo de tokens em multi-agente</h4>
+    <p class="cost-unit">Consumo relativo de tokens (1× = baseline de uma sessão de agente único)</p>
+    <div class="cost-bars">
+      <div class="cost-bar"><span class="cost-label">Sessão única</span><div class="bar"><div class="bar-fill" style="width:15%">1×</div></div></div>
+      <div class="cost-bar"><span class="cost-label">Orquestração com sub-agents</span><div class="bar"><div class="bar-fill" style="width:75%">4–7×</div></div></div>
+    </div>
+    <p>Em multi-agente o custo cresce rápido — orquestrar com Opus, mas delegar busca para Haiku reduz drasticamente o consumo.</p>
+  </div>
+</section>
+
+<!-- ============ 05 — SEGURANÇA ============ -->
+<section id="security" class="section">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2>Segurança · os três vetores que importam</h2>
+    <p class="section-sub">Onde o código executa muda o blast radius. Prompt injection, supply chain e visibilidade zero são os riscos sistêmicos.</p>
+  </div>
+
+  <div class="threat-grid">
+    <div class="threat-card">
+      <div class="threat-num">1</div>
+      <h4>Prompt Injection</h4>
+      <ul class="threat-bullets">
+        <li>Atacante embute instruções em documento, página web ou resposta de API</li>
+        <li>O agente lê e executa como se fosse comando legítimo</li>
+        <li>Difícil de resolver — o agente <em>precisa</em> processar conteúdo não-confiável</li>
+      </ul>
+      <div class="threat-evidence">
+        <strong>Caso real · jan/2026 · PromptArmor</strong>
+        <ul>
+          <li>Documento Word com texto branco invisível (1 ponto)</li>
+          <li>Cowork fez upload de documentos financeiros para conta do atacante</li>
+          <li>Sem exploit, sem malware — apenas abrir o arquivo</li>
+        </ul>
+      </div>
+      <div class="threat-vectors">
+        <strong>Vetores em multi-agent</strong>
+        <ul>
+          <li>Documentos processados por sub-agents</li>
+          <li>Respostas de APIs via MCP tools</li>
+          <li>Registros de banco retornados por SQL</li>
+          <li>READMEs ou comentários em código lido</li>
+        </ul>
+      </div>
+    </div>
+    <div class="threat-card">
+      <div class="threat-num">2</div>
+      <h4>Supply Chain</h4>
+      <ul class="threat-bullets">
+        <li>Claude instala dependências de PyPI/npm/RubyGems <strong>sem auditar versões</strong></li>
+        <li>Apenas hashes padrão dos gerenciadores de pacote</li>
+        <li>Pacote comprometido vira Remote Access Trojan no momento da execução</li>
+      </ul>
+      <div class="threat-evidence">
+        <strong>Eventos 2026</strong>
+        <ul>
+          <li>Mar/2026: axios (npm) comprometido com RAT, mesmo mês de incidente com Claude Code</li>
+          <li>Q1/2026: CVEs originados de código gerado por IA cresceram de <strong>6 para 35/mês</strong></li>
+          <li>Documentação de API envenenada causando instalação automática de deps maliciosas</li>
+        </ul>
+      </div>
+      <div class="threat-vectors">
+        <strong>Mitigação</strong>
+        <ul>
+          <li>Versões pinadas no <code>requirements.txt</code> / <code>package-lock.json</code></li>
+          <li>Code review humano nas dependências novas</li>
+          <li>Distribuir apenas após auditoria</li>
+        </ul>
+      </div>
+    </div>
+    <div class="threat-card">
+      <div class="threat-num">3</div>
+      <h4>Visibilidade Zero</h4>
+      <ul class="threat-bullets">
+        <li>Cowork não entra em Audit Logs, Compliance API nem Data Exports</li>
+        <li>Em nenhum plano — incluindo Enterprise</li>
+        <li>EDR / DLP / SIEM corporativos não enxergam a VM por design</li>
+      </ul>
+      <div class="threat-evidence">
+        <strong>Consequência operacional</strong>
+        <ul>
+          <li>Sem log do que foi executado, lido ou enviado</li>
+          <li>Ponto cego para compliance de fundo regulado</li>
+          <li>Investigação de incidente fica sem trilha</li>
+        </ul>
+      </div>
+      <div class="threat-vectors">
+        <strong>Mitigação</strong>
+        <ul>
+          <li>Claude Code Enterprise — audit log ativo</li>
+          <li>Claude Managed Agents — logs nativos no Console</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DADOS — DESTINO -->
+  <h3 class="sub-h3">Seus dados · para onde vão</h3>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Dado</th><th>Destino</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Conteúdo processado pelo agente</td><td>API Anthropic</td><td>Enviado para processamento do modelo</td></tr>
+      <tr><td>Credenciais / API keys</td><td>Keychain local (macOS)</td><td>Não enviadas ao modelo</td></tr>
+      <tr><td>Connectors via Cowork</td><td>Nuvem Anthropic</td><td>Não passa pela rede local</td></tr>
+      <tr><td>Connector customizado</td><td>Servidor com endereço alcançável pela internet</td><td>Deve responder aos IPs publicados pela Anthropic (alcançável ≠ aberto sem auth — ver Seção 08)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-danger">
+    <div class="callout-title">Cowork não é adequado para fluxos regulados (estado atual)</div>
+    <p>Para indústrias com obrigação de rastreabilidade (financeiro, saúde, jurídico): <strong>Claude Code Enterprise (com audit log)</strong> ou <strong>Claude Managed Agents</strong> são as opções defensáveis. Cowork fica para tarefas internas sem exigência de compliance.</p>
+  </div>
+</section>
+
+<!-- ============ 06 — FINANCIAL SERVICES (RELEVÂNCIA DIRETA SETTER) ============ -->
+<section id="financial" class="section dark">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <h2>Financial Services · skills prontas para gestoras</h2>
+    <p class="section-sub">A Anthropic lançou em mai/2026 dez templates para os fluxos mais demorados em serviços financeiros.</p>
+  </div>
+
+  <div class="fs-grid">
+    <div class="fs-template">Pitchbooks</div>
+    <div class="fs-template">Triagem KYC</div>
+    <div class="fs-template">Month-end close</div>
+    <div class="fs-template">Pesquisa de mercado</div>
+    <div class="fs-template">+6 templates</div>
+  </div>
+
+  <div class="duo-grid">
+    <div class="duo-card">
+      <div class="duo-eyebrow">MODO ASSISTIDO</div>
+      <div class="duo-headline">Junto com o analista (Plugin)</div>
+      <p>Skill instalada como plugin em Cowork ou Code, rodando no desktop do profissional. Bom para análises iterativas com humano no loop.</p>
+      <ul>
+        <li>No Cowork: sub-agents forçados a Haiku (bug §04)</li>
+        <li>No Code: sub-agents com controle total de modelo</li>
+      </ul>
+    </div>
+    <div class="duo-card">
+      <div class="duo-eyebrow">MODO AUTÔNOMO</div>
+      <div class="duo-headline">Claude Managed Agents (Cookbook)</div>
+      <p>Sessões longas autônomas no infraestrutura da Anthropic, sem precisar do desktop do analista. <strong>Audit log completo</strong> no Console. Defensável para compliance.</p>
+      <ul>
+        <li>Sem dependência do desktop do analista</li>
+        <li>Rastreabilidade nativa</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-h3">Connectors incluídos</h3>
+  <div class="connector-grid">
+    <div class="conn-pill">FactSet</div>
+    <div class="conn-pill">Daloopa</div>
+    <div class="conn-pill">S&P Capital IQ</div>
+    <div class="conn-pill">Moody's MCP</div>
+    <div class="conn-pill">+8 novos conectores</div>
+  </div>
+</section>
+
+<!-- ============ 07 — DISTRIBUIR SCRIPTS ============ -->
+<section id="sharing" class="section">
+  <div class="section-head">
+    <span class="section-num">07</span>
+    <h2>Distribuir scripts para analistas · o caminho seguro</h2>
+    <p class="section-sub">Caso central da Setter: você desenvolve no Claude Code, mas os analistas executam. Quatro etapas obrigatórias.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">A</div>
+      <h4>Desenvolvimento</h4>
+      <p><strong>Claude Code Desktop ou CLI</strong> com <code>/sandbox</code> ou Docker.</p>
+      <ul>
+        <li>Sub-agents com modelos corretos (Opus → Sonnet → Haiku)</li>
+        <li>Hooks PreToolUse para bloquear operações sensíveis</li>
+        <li>Enterprise: audit log ativado</li>
+      </ul>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">B</div>
+      <h4>Auditoria & versionamento</h4>
+      <p>Commit em repositório GitHub privado. <strong>Versões pinadas</strong>.</p>
+      <ul>
+        <li>Code review humano nas dependências novas</li>
+        <li>CI verifica hashes e advisories</li>
+        <li>Tag de versão estável para o time</li>
+      </ul>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">C</div>
+      <h4>Distribuição via Teams</h4>
+      <p>Skill empacotada + Project compartilhado.</p>
+      <ul>
+        <li>Permissão: <em>usar</em>, não <em>editar</em></li>
+        <li>Brand book, glossário e exemplos no Project</li>
+        <li>Skill aponta para repo de scripts auditados</li>
+      </ul>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">D</div>
+      <h4>Execução pelo analista</h4>
+      <p>Por criticidade:</p>
+      <ul>
+        <li>Crítico/regulado: <strong>Code na Web</strong></li>
+        <li>Mesa: <strong>Cowork</strong> com pasta dedicada</li>
+        <li>Processos longos: <strong>VPS / GitHub Actions</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CENÁRIOS DE RISCO -->
+  <h3 class="sub-h3">Avaliação de risco por cenário</h3>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Cenário</th><th>Risco</th><th>Recomendação</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Código próprio auditado, pasta isolada</td>
+        <td><span class="risk-tag risk-low">Baixo</span></td>
+        <td>Cowork é adequado</td>
+      </tr>
+      <tr>
+        <td>Código com dependências sem versão pinada</td>
+        <td><span class="risk-tag risk-medium">Médio</span></td>
+        <td>Pinar versões antes de distribuir</td>
+      </tr>
+      <tr>
+        <td>Código de origem desconhecida</td>
+        <td><span class="risk-tag risk-high">Alto</span></td>
+        <td>Não usar sem auditoria</td>
+      </tr>
+      <tr>
+        <td>Pasta conectada contém dados sensíveis</td>
+        <td><span class="risk-tag risk-high">Alto</span></td>
+        <td>Multiplica qualquer risco — usar pasta dedicada e vazia</td>
+      </tr>
+      <tr>
+        <td>Processo que precisa rodar por horas/dias</td>
+        <td><span class="risk-tag risk-medium">Médio</span></td>
+        <td>Vai para VPS / GitHub Actions — não o agente</td>
+      </tr>
+      <tr>
+        <td>Fluxo com obrigação de compliance</td>
+        <td><span class="risk-tag risk-high">Alto</span></td>
+        <td>Claude Code Enterprise ou Managed Agents</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-h3">Regras inegociáveis (resumo)</h3>
+  <div class="rules-row">
+    <div class="rule-pill"><span class="rp-num">01</span>Pasta dedicada e vazia</div>
+    <div class="rule-pill"><span class="rp-num">02</span>Versões pinadas</div>
+    <div class="rule-pill"><span class="rp-num">03</span>MCP Gateway · sem credenciais raw</div>
+    <div class="rule-pill"><span class="rp-num">04</span>Computer Use desligado por padrão</div>
+    <div class="rule-pill"><span class="rp-num">05</span>Sem jobs longos no agente</div>
+    <div class="rule-pill"><span class="rp-num">06</span>Audit log Enterprise ativo</div>
+  </div>
+
+  <div class="snippet">
+    <div class="snippet-label">requirements.txt · pinado para distribuição interna</div>
+    <pre>pandas==2.1.4
+requests==2.31.0
+numpy==1.26.3
+scikit-learn==1.3.2</pre>
+  </div>
+
+  <div class="snippet">
+    <div class="snippet-label">Setup seguro do Claude Code</div>
+    <pre># Ativar sandbox (macOS / Linux / WSL2)
+/sandbox
+
+# Fixar modelo padrão dos sub-agents
+export CLAUDE_CODE_SUBAGENT_MODEL="claude-haiku-4-5-20251001"
+
+# Container isolado em CI/CD
+docker run --rm -it \
+  -v $(pwd):/workspace:ro \   # montagem read-only
+  claude-code-image</pre>
+  </div>
+
+  <h3 class="sub-h3">Fluxo para scripts de longa duração</h3>
+  <div class="long-flow">
+    <div class="lf-step"><strong>Claude Code na Web</strong><br/><span>Escreve, testa, valida → commit no GitHub</span></div>
+    <div class="lf-arrow">↓</div>
+    <div class="lf-step"><strong>VPS / GitHub Actions</strong><br/><span>Executa por tempo indefinido, sem timeout de agente</span></div>
+  </div>
+</section>
+
+<!-- ============ 08 — MCP SERVER PRÓPRIO ============ -->
+<section id="mcp-server" class="section dark">
+  <div class="section-head">
+    <span class="section-num">08</span>
+    <h2>MCP Server próprio · vantagens e armadilhas</h2>
+    <p class="section-sub">Esse "MCP Server próprio" é o que <strong>cumpre na prática o papel de "MCP Gateway"</strong> descrito na Seção 02 — o proxy corporativo que centraliza credenciais, audit log e regras de negócio. Ter seu próprio vira o <em>eixo de governança</em> entre Claude e os sistemas da gestora — mas também um ponto único de falha se mal configurado. Esta seção responde: quando vale, como hospedar com segurança, e quando dá para fazer mais simples.</p>
+  </div>
+
+  <!-- VANTAGENS -->
+  <h3 class="sub-h3">Vantagens de ter um MCP Server próprio</h3>
+  <div class="mcp-grid mcp-grid-8">
+    <div class="mcp-card mcp-card-highlight">
+      <div class="mcp-num">01</div>
+      <h4>Banco de dados consolidado</h4>
+      <p>Único caminho para consolidar o trabalho de todos os analistas em uma base estruturada — análises, métricas, histórico de decisões. Sem MCP próprio, cada analista trabalha em silo isolado, sem reaproveitamento.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">02</div>
+      <h4>Credenciais centralizadas</h4>
+      <p>Todas as API keys (FactSet, S&P, Daloopa, banco interno, Bloomberg) ficam no servidor. Analista nunca vê nem precisa armazenar.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">03</div>
+      <h4>Audit log próprio</h4>
+      <p>Toda chamada de connector registrada com usuário, timestamp e parâmetros. Suplementa o audit log do Code Enterprise.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">04</div>
+      <h4>Mascaramento de dados</h4>
+      <p>Camada de transformação antes do conteúdo chegar ao Claude — remove CPFs, PIIs, números de contas, posições internas.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">05</div>
+      <h4>Revogação por usuário</h4>
+      <p>Demitir analista = revogar token no MCP, sem ter que trocar as API keys upstream caras (FactSet, S&P).</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">06</div>
+      <h4>Rate limit e cache</h4>
+      <p>Controla consumo por usuário ou projeto. Cacheia respostas para reduzir custo das APIs externas pagas.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">07</div>
+      <h4>Agregação de fontes</h4>
+      <p>Une múltiplos sistemas internos (Bloomberg, Oracle, BI, planilhas) em um único endpoint padronizado para o Claude consumir.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">08</div>
+      <h4>Lógica de negócio centralizada</h4>
+      <p>Regras proprietárias da gestora (mapeamento de tickers, cálculos internos, normalizações) ficam no MCP. Mudanças não exigem atualizar scripts em cada analista.</p>
+    </div>
+  </div>
+
+  <!-- VETORES DE ATAQUE — CENÁRIO PIOR -->
+  <h3 class="sub-h3">Vetores de ataque · cenário mal configurado</h3>
+  <p class="lead-dark">Os seis vetores abaixo se manifestam <strong>apenas no contra-exemplo</strong>: VPS deixada na internet sem firewall e sem autenticação forte. <strong>Com o MCP configurado no Modo 1 (controle por firewall) ou Modo 2 (controle por autenticação), descritos mais abaixo, a maioria deixa de ser vetor real</strong> — ver subseção seguinte.</p>
+  <div class="vector-grid">
+    <div class="vector-card">
+      <div class="vector-label">Endpoint exposto</div>
+      <p>VPS pública com IP roteável e portas abertas para qualquer um. Atacante encontra via Shodan ou scanning automatizado em horas.</p>
+    </div>
+    <div class="vector-card">
+      <div class="vector-label">Comprometimento total</div>
+      <p>Se o atacante invade o servidor, ele tem <strong>todas as credenciais corporativas</strong> dentro dele. Bloomberg, FactSet, banco interno, tudo de uma vez.</p>
+    </div>
+    <div class="vector-card">
+      <div class="vector-label">Exfiltração disfarçada</div>
+      <p>MCP Server tem permissão para chamar APIs externas. Atacante usa essa permissão para enviar dados internos a servidores que controla.</p>
+    </div>
+    <div class="vector-card">
+      <div class="vector-label">Dependências envenenadas</div>
+      <p>Uma única biblioteca comprometida no projeto do MCP Server (npm, pip) basta para vazar credenciais em runtime.</p>
+    </div>
+    <div class="vector-card">
+      <div class="vector-label">Logs expostos</div>
+      <p>Logs do servidor contêm parâmetros de chamadas — incluindo dados sensíveis que passaram pelo proxy. Se a VPS é invadida, logs vazam junto.</p>
+    </div>
+    <div class="vector-card">
+      <div class="vector-label">Backdoor persistente</div>
+      <p>VPS pública é difícil de monitorar sem ferramenta dedicada. Atacante pode manter acesso por meses sem ser detectado.</p>
+    </div>
+  </div>
+
+  <!-- RISCO RESIDUAL — CENÁRIO REAL -->
+  <h3 class="sub-h3">Risco real quando o MCP está bem configurado</h3>
+  <p class="lead-dark">Quando o MCP está no Modo 1 (controle por firewall na camada de rede) ou Modo 2 (controle por autenticação na camada de aplicação) — ambos descritos mais abaixo — a superfície de ataque cai drasticamente. O que sobra são riscos comuns a qualquer serviço corporativo, mitigáveis com processo:</p>
+  <div class="residual-grid">
+    <div class="residual-card residual-low">
+      <div class="residual-prob">Baixa probabilidade</div>
+      <h4>Descoberta via Certificate Transparency</h4>
+      <p>Todo certificado TLS emitido vira público em logs de CT (crt.sh). Subdomínio fica descobrível. Não é vetor real <em>se</em> a autenticação está correta — atacante precisa furar o auth.</p>
+    </div>
+    <div class="residual-card residual-medium">
+      <div class="residual-prob">Média probabilidade</div>
+      <h4>Vulnerabilidade no código do MCP</h4>
+      <p>Bug no servidor pode vazar dados mesmo com auth válida — SQL injection, path traversal, parsing inseguro. Mitigação: code review, fuzzing, libs maduras.</p>
+    </div>
+    <div class="residual-card residual-medium">
+      <div class="residual-prob">Média probabilidade</div>
+      <h4>Supply chain de dependências</h4>
+      <p>Pacote npm/pip comprometido entra no build do MCP. Vetor mais difícil de eliminar: exige lockfiles, scan automático (Snyk/Trivy), revisão humana em atualizações.</p>
+    </div>
+    <div class="residual-card residual-low">
+      <div class="residual-prob">Baixa probabilidade</div>
+      <h4>Zero-day em infra base</h4>
+      <p>Kernel, OpenSSL, runtime (Node/Python). Mitigação: updates automáticos da imagem, monitoramento de CVEs upstream, imagem distroless.</p>
+    </div>
+    <div class="residual-card residual-medium">
+      <div class="residual-prob">Média probabilidade</div>
+      <h4>Insider ou credencial comprometida</h4>
+      <p>Quem tem acesso legítimo pode abusar. Token roubado vira ação válida. Mitigação: princípio do menor privilégio + audit log + alertas em padrões anômalos.</p>
+    </div>
+    <div class="residual-card residual-medium">
+      <div class="residual-prob">Média probabilidade</div>
+      <h4>Drift de configuração</h4>
+      <p>Configurações migram com o tempo — TLS desabilitado para debug, IP whitelist relaxada, vault contornado. Mitigação: IaC versionado (Terraform) + auditoria trimestral.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info residual-summary">
+    <div class="callout-title">Resumo honesto</div>
+    <p>Com domínio dedicado + hardening básico (mTLS/JWT + IP whitelist + vault + IaC + monitoramento), o MCP Server tem perfil de risco <strong>comparável a qualquer outro serviço corporativo bem mantido</strong> — não é "questão de tempo até invadirem". Os riscos reais que sobram são supply chain e drift de configuração, ambos mitigáveis com processo. <em>Defensável para uso em produção.</em></p>
+  </div>
+
+  <!-- CAMADAS OBRIGATÓRIAS -->
+  <h3 class="sub-h3">Camadas obrigatórias para hospedagem segura</h3>
+  <div class="checklist-grid">
+    <div class="check-item">
+      <div class="check-num">I</div>
+      <div class="check-body">
+        <h5>Rede</h5>
+        <ul>
+          <li>Atrás de Cloudflare ou WAF — nunca exposto direto na internet</li>
+          <li>IP whitelist: aceitar apenas conexões dos <strong>IPs publicados pela Anthropic</strong></li>
+          <li>HTTPS obrigatório com certificado válido (Let's Encrypt auto-renovado)</li>
+          <li>Cloudflare Tunnel ou reverse proxy nginx com TLS termination</li>
+        </ul>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-num">II</div>
+      <div class="check-body">
+        <h5>Autenticação</h5>
+        <ul>
+          <li>mTLS (cliente certificado) ou JWT assinado pelo SSO corporativo</li>
+          <li>Tokens por usuário com escopo limitado e expiração curta (15 min)</li>
+          <li>Sem autenticação básica HTTP — nunca</li>
+          <li>Login federado preferível (Okta, Azure AD)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-num">III</div>
+      <div class="check-body">
+        <h5>Credenciais</h5>
+        <ul>
+          <li>HashiCorp Vault, AWS Secrets Manager ou similar — nunca <code>.env</code> em arquivo</li>
+          <li>Rotação automática (90 dias máximo)</li>
+          <li>Princípio do menor privilégio: cada API key com escopo mínimo</li>
+          <li>Quebra-vidros documentado para revogação emergencial</li>
+        </ul>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-num">IV</div>
+      <div class="check-body">
+        <h5>Container e processo</h5>
+        <ul>
+          <li>Docker com user não-root</li>
+          <li>Imagem base mínima (distroless ou alpine)</li>
+          <li>Watchtower ou Renovate para updates automáticos da base</li>
+          <li>Scan da imagem (Trivy, Snyk) antes de cada deploy</li>
+        </ul>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-num">V</div>
+      <div class="check-body">
+        <h5>Monitoramento</h5>
+        <ul>
+          <li>Logs estruturados (JSON) enviados ao SIEM corporativo</li>
+          <li>Alertas em pico de chamadas, IPs novos, erros 4xx/5xx em série</li>
+          <li>fail2ban para tentativas de brute force</li>
+          <li>Health check externo (UptimeRobot ou Pingdom)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-num">VI</div>
+      <div class="check-body">
+        <h5>Continuidade</h5>
+        <ul>
+          <li>Backup criptografado das configurações (sem credenciais junto)</li>
+          <li>Plano de incidente documentado: quem para o serviço, quem revoga keys</li>
+          <li>Run book de recovery testado trimestralmente</li>
+          <li>Comunicação clara com analistas em caso de queda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUANDO É MAIS SIMPLES -->
+  <h3 class="sub-h3">Quando dá para fazer mais simples</h3>
+  <div class="simple-grid">
+    <div class="simple-card">
+      <h4>Modo 1 · controle por firewall</h4>
+      <p>MCP roda numa VPS comum (Hostinger, AWS, DigitalOcean) com firewall fechado para a internet aberta. Analistas alcançam por uma rede virtual entre máquinas — VPN corporativa existente ou Tailscale/Cloudflare Tunnel (tier gratuito). Pode usar IP direto, domínio é opcional. <strong>Caminho recomendado para Setter na maioria dos fluxos.</strong></p>
+    </div>
+    <div class="simple-card">
+      <h4>POC inicial</h4>
+      <p>Variante temporária do Modo 1 para validar conceito: container Docker em VPS pequena + Cloudflare Tunnel (cria um endereço dedicado com proteção embutida) + token compartilhado entre poucos usuários resolve. Migrar para Modo 1 completo (ou Modo 2 se precisar de Code na Web) depois que provar valor.</p>
+    </div>
+    <div class="simple-card">
+      <h4>Connectors públicos</h4>
+      <p>Se o MCP Server só fala com APIs públicas (Wikipedia, Banco Central, dados públicos da B3), não há credenciais sensíveis a proteger. O foco passa a ser apenas disponibilidade.</p>
+    </div>
+  </div>
+
+  <!-- RECOMENDAÇÃO -->
+  <div class="callout callout-info mcp-recommend">
+    <div class="callout-title">Recomendação</div>
+    <p>Começar com <strong>Modo 1 (controle por firewall)</strong> como padrão. A VPS roda em qualquer provedor — Hostinger, AWS, DigitalOcean (~US$ 10/mês) — com firewall configurado para aceitar apenas IPs da rede da Setter (Tailscale free ou VPN corporativa existente). Esse MCP serve FactSet, S&P, Daloopa e o banco de consolidação para todo Code CLI/Desktop e Cowork rodando nas máquinas dos analistas. Pode usar IP direto, domínio é opcional. <strong>Apenas para fluxos com Code na Web</strong> — que roda na infra da Anthropic, fora da rede da Setter — adicionar <strong>Modo 2 (controle por autenticação)</strong>: o mesmo MCP, mas com um endpoint específico em domínio dedicado (ex.: <code>mcp.setter.com.br</code>) protegido por Cloudflare Access (free até 50 usuários) com SSO + mTLS. <em>Nunca deixar uma VPS sem firewall nem login — o problema não é a VPS, é deixá-la sem nenhuma das duas barreiras.</em></p>
+  </div>
+
+  <!-- DESCONSTRUINDO TERMOS -->
+  <h3 class="sub-h3">As duas formas reais de hospedar o MCP</h3>
+  <div class="hosting-intro">
+    <p class="lead-dark">Antes de comparar, três pontos que sempre confundem:</p>
+    <ul class="hosting-clarify">
+      <li><strong>VPS = Virtual Private Server.</strong> O "Private" vem da virtualização (sua VPS é isolada de outros clientes do provedor) — <em>nada a ver com acessibilidade na internet</em>. Toda VPS contratada na Hostinger, AWS, DigitalOcean ou Azure vem com <strong>IP público por padrão</strong> — qualquer um na internet consegue tentar conectar nela. Sim, uma VPS Hostinger conta como VPS para os dois modos abaixo.</li>
+      <li>A diferença entre os dois modos <strong>não é onde o servidor está</strong> — em ambos é uma VPS de provedor de nuvem. A diferença é <strong>em que camada o acesso é controlado</strong>: no firewall (Modo 1) ou na autenticação da aplicação (Modo 2).</li>
+      <li><strong>Domínio é opcional.</strong> O MCP responde no IP da VPS de qualquer jeito. Um domínio (<code>mcp.setter.com.br</code>) é só um nome amigável — ajuda em SSL e Cloudflare Access, mas não é obrigatório. No Modo 1 dá pra usar IP direto pela rede da Setter; no Modo 2, domínio facilita bastante mas tecnicamente IP nu também funciona.</li>
+    </ul>
+  </div>
+
+  <div class="scenario-grid scenario-grid-2">
+    <div class="scenario-card scenario-good">
+      <div class="scenario-label">Modo 1 · padrão recomendado</div>
+      <h4>Acesso controlado pelo firewall (camada de rede)</h4>
+      <p class="scenario-analogy">Analogia: <em>um telefone que só toca para números autorizados — quem não está na lista nem chega a fazer a chamada chegar.</em></p>
+      <dl class="scenario-dl">
+        <dt>Onde fica</dt>
+        <dd>VPS comum em provedor de nuvem (Hostinger, AWS, DigitalOcean). <strong>A VPS Hostinger funciona para esse modo</strong> — basta configurar o firewall.</dd>
+        <dt>Como o acesso é controlado</dt>
+        <dd>O firewall da VPS é configurado para <strong>recusar TUDO que vem da internet aberta</strong>. Aceita apenas conexões vindas de IPs específicos: os IPs dos analistas conectados na rede da Setter.</dd>
+        <dt>Como o analista chega</dt>
+        <dd>Conectando-se a uma rede virtual que a empresa controla. Pode ser:
+          <ul>
+            <li>A VPN corporativa que a Setter já usa para email/ERP, se existir;</li>
+            <li><strong>Tailscale, Cloudflare Tunnel ou WireGuard</strong> — criam uma "rede entre máquinas" sobre a internet, com tier gratuito suficiente para uma gestora.</li>
+          </ul>
+          Ao conectar, o analista recebe um IP dessa rede (ex.: <code>100.64.5.3</code> no Tailscale). Esse IP entra na lista de autorizados do firewall.
+        </dd>
+        <dt>Quem está fora dessa rede vê o quê?</dt>
+        <dd>Para qualquer atacante na internet aberta, o firewall responde "porta fechada" — <strong>nem chega a falar com o MCP</strong>. O servidor "não existe" para quem está fora.</dd>
+        <dt>Precisa de domínio?</dt>
+        <dd><strong>Não obrigatoriamente.</strong> Analistas podem chamar o MCP pelo IP direto (ex.: <code>https://100.64.5.3:8443</code>). Domínio interno é opcional, só pra nome amigável.</dd>
+        <dt>Quando funciona</dt>
+        <dd>Code CLI, Code Desktop e Cowork rodando nas máquinas dos analistas — cobre &gt;90% dos fluxos.</dd>
+        <dt>Quando NÃO funciona</dt>
+        <dd>Quando o <strong>Code na Web</strong> precisa chamar o MCP. Esse modo da Anthropic não consegue entrar na rede da Setter.</dd>
+      </dl>
+    </div>
+
+    <div class="scenario-card scenario-medium">
+      <div class="scenario-label">Modo 2 · necessário em casos específicos</div>
+      <h4>Acesso controlado pela autenticação (camada de aplicação)</h4>
+      <p class="scenario-analogy">Analogia: <em>um telefone público — qualquer um pode ligar — mas a secretária eletrônica pergunta a senha antes de passar a chamada adiante.</em></p>
+      <dl class="scenario-dl">
+        <dt>Onde fica</dt>
+        <dd>Mesmo tipo de VPS do Modo 1 (Hostinger, AWS, DigitalOcean). A configuração é que muda.</dd>
+        <dt>Como o acesso é controlado</dt>
+        <dd>O firewall <strong>aceita conexões de qualquer lugar</strong>. Mas a primeira coisa que o servidor MCP faz é exigir autenticação em três camadas: <strong>login SSO da Setter + certificado mTLS no cliente + IP autorizado</strong>. Sem isso, responde 401/403 e fecha — nenhum dado é entregue.</dd>
+        <dt>O que "alcançável da internet" significa aqui</dt>
+        <dd>Atacantes conseguem ver que o endereço existe (aparece em logs públicos de certificados SSL). Mas <strong>ver não é o mesmo que conseguir usar</strong> — passam horas tentando credenciais e tomam 401 em todas.</dd>
+        <dt>Precisa de domínio?</dt>
+        <dd><strong>Praticamente sim.</strong> Cloudflare Access (que coloca o SSO na frente) requer domínio. Certificados SSL convencionais também. Tecnicamente IP nu funciona, mas a operação fica frágil — domínio é o caminho normal aqui.</dd>
+        <dt>Quando usar</dt>
+        <dd><strong>Exclusivamente</strong> quando Code na Web precisa chamar o MCP. Esse modo roda em infra da Anthropic, fora da rede da Setter — então o servidor precisa estar alcançável pela internet, com a proteção em camadas descrita acima.</dd>
+        <dt>Custo adicional</dt>
+        <dd>Cloudflare Access (camada de SSO + mTLS): <strong>gratuito até 50 usuários</strong>, depois ~US$ 7/usuário/mês.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="callout callout-warn anti-pattern">
+    <div class="callout-title">A terceira possibilidade (não usar) — para contraste</div>
+    <p>Tecnicamente, dá para alugar a mesma VPS (Hostinger, AWS, etc.) e <strong>deixá-la sem firewall e sem autenticação</strong> — porta aberta, qualquer um na internet entra sem barreira. Atacantes acham o IP em horas via Shodan, tentam credenciais comuns, e em algum momento conseguem entrar. Para uma gestora, <strong>não é opção real</strong>. O ponto importante: <em>os Modos 1 e 2 acima também usam VPS (qualquer uma — Hostinger inclusive)</em>. O que muda é a configuração: o Modo 1 fecha o vetor na camada de rede (firewall), o Modo 2 fecha na camada de aplicação (login forte). O problema não é a VPS — é deixar a VPS sem nenhuma das duas barreiras.</p>
+  </div>
+
+  <h4 class="effort-h4">Esforço de operação · comparativo</h4>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Modo</th><th>Setup inicial</th><th>Manutenção mensal</th><th>Custo recorrente</th><th>Risco residual</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1 · Controle por firewall</strong></td>
+        <td>1–2 semanas</td>
+        <td>~4h (patches, logs)</td>
+        <td>VPS ~US$ 10/mês · rede virtual via Tailscale free (ou VPN existente)</td>
+        <td><span class="risk-tag risk-low">Baixo</span></td>
+      </tr>
+      <tr>
+        <td><strong>2 · Controle por autenticação</strong></td>
+        <td>3–4 semanas</td>
+        <td>~10h (monitoramento, rotação de tokens)</td>
+        <td>VPS ~US$ 10/mês + Cloudflare Access (free até 50 usuários, depois ~US$ 7/usuário) + domínio</td>
+        <td><span class="risk-tag risk-medium">Médio · defensável</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 09 — DECISÃO INTERATIVA ============ -->
+<section id="decision" class="section">
+  <div class="section-head">
+    <span class="section-num">09</span>
+    <h2>Árvore de decisão · qual ambiente usar agora</h2>
+    <p class="section-sub">Responda as 4 perguntas para receber a recomendação adaptada ao caso.</p>
+  </div>
+
+  <div class="decision-tool">
+    <div class="dt-questions">
+      <div class="dt-q" data-q="1">
+        <div class="dt-q-label">1. O fluxo precisa de audit log / rastreabilidade?</div>
+        <div class="dt-options">
+          <button data-value="yes">Sim</button>
+          <button data-value="no">Não</button>
+        </div>
+      </div>
+      <div class="dt-q" data-q="2">
+        <div class="dt-q-label">2. Há dados sensíveis ou regulados envolvidos?</div>
+        <div class="dt-options">
+          <button data-value="yes">Sim</button>
+          <button data-value="no">Não</button>
+        </div>
+      </div>
+      <div class="dt-q" data-q="3">
+        <div class="dt-q-label">3. O usuário final é desenvolvedor?</div>
+        <div class="dt-options">
+          <button data-value="yes">Sim</button>
+          <button data-value="no">Não — analista de negócio</button>
+        </div>
+      </div>
+      <div class="dt-q" data-q="4">
+        <div class="dt-q-label">4. Precisa de multi-agent com Opus/Sonnet específicos?</div>
+        <div class="dt-options">
+          <button data-value="yes">Sim</button>
+          <button data-value="no">Não</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dt-result" id="dt-result">
+      <div class="dt-result-empty">Responda as 4 perguntas para receber a recomendação.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 — ROADMAP ============ -->
+<section id="roadmap" class="section dark">
+  <div class="section-head">
+    <span class="section-num">10</span>
+    <h2>Roadmap · o que está pronto e o que vem por aí</h2>
+  </div>
+
+  <div class="roadmap">
+    <div class="rm-item rm-shipped">
+      <div class="rm-date">Mai/2026</div>
+      <h4>Dynamic Workflows (Opus 4.8)</h4>
+      <p>Centenas de sub-agents paralelos por sessão. Limite atual: <strong>16 concorrentes, 1.000 por execução</strong>. Disponível em Claude Code (Enterprise, Team, Max).</p>
+    </div>
+    <div class="rm-item rm-shipped">
+      <div class="rm-date">Mai/2026</div>
+      <h4>Effort Control (Opus 4.8)</h4>
+      <p>Controle de profundidade do raciocínio no claude.ai e Cowork. Aumentando → raciocínio mais profundo; reduzindo → resposta mais rápida com menos consumo de limite.</p>
+    </div>
+    <div class="rm-item rm-shipped">
+      <div class="rm-date">Mai/2026</div>
+      <h4>Financial Services Skills</h4>
+      <p>10 templates prontos: pitchbooks, KYC, month-end close, market research, e outros. Modos Plugin (Cowork/Code) ou Cookbook (Managed Agents).</p>
+    </div>
+    <div class="rm-item rm-shipped">
+      <div class="rm-date">Mar/2026</div>
+      <h4>Agent Skills como padrão aberto</h4>
+      <p><code>agentskills.io</code> com Atlassian, Figma, Stripe, Notion, Zapier. Incluído em Max, Pro, Team e Enterprise.</p>
+    </div>
+    <div class="rm-item rm-pending">
+      <div class="rm-date">Sem prazo</div>
+      <h4>Fix do bug Cowork (sub-agent forçado a Haiku)</h4>
+      <p>Campo <code>defaultSubagentModel</code> já existe no schema — falta apenas um writer no Electron host. Probabilidade alta, sem prazo oficial.</p>
+    </div>
+    <div class="rm-item rm-pending">
+      <div class="rm-date">Sem prazo</div>
+      <h4>Audit log no Cowork</h4>
+      <p>Gap reconhecido pela Anthropic. Até lá, Cowork fica fora de fluxos regulados.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 — TL;DR · DECISÕES EXECUTIVAS ============ -->
+<section id="summary" class="section">
+  <div class="section-head">
+    <span class="section-num">11</span>
+    <h2>TL;DR · cinco decisões executivas</h2>
+    <p class="section-sub">Cada item mostra a pergunta e a resposta direta. Clique para ver o porquê e como aplicar.</p>
+  </div>
+
+  <div class="decisions-list">
+
+    <details class="decision-item" open>
+      <summary>
+        <span class="dec-num">01</span>
+        <div class="dec-content">
+          <div class="dec-question">Qual produto contratamos como padrão da gestora?</div>
+          <div class="dec-answer">Claude Code <strong>Enterprise</strong> como padrão — única opção com audit log + execução local controlada.</div>
+        </div>
+        <span class="dec-toggle">+</span>
+      </summary>
+      <div class="dec-detail">
+        <div class="dec-col">
+          <h5>Por quê</h5>
+          <ul>
+            <li>Audit log nativo no plano Enterprise atende compliance</li>
+            <li>Sub-agents respeitam Opus/Sonnet/Haiku — qualidade da automação</li>
+            <li>Managed Agents é alternativa para automações 100% autônomas (também com log)</li>
+            <li>Cowork e Code na Web continuam disponíveis para os casos certos</li>
+          </ul>
+        </div>
+        <div class="dec-col">
+          <h5>Como aplicar</h5>
+          <ul>
+            <li>Fechar contrato Enterprise antes de qualquer rollout</li>
+            <li>Ativar audit log no console no dia 1</li>
+            <li>Definir lista de pastas permitidas e Docker no Windows</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="decision-item">
+      <summary>
+        <span class="dec-num">02</span>
+        <div class="dec-content">
+          <div class="dec-question">Onde os analistas executam os scripts?</div>
+          <div class="dec-answer">Por criticidade — <strong>Code na Web</strong> para sensível, <strong>Cowork</strong> para mesa.</div>
+        </div>
+        <span class="dec-toggle">+</span>
+      </summary>
+      <div class="dec-detail">
+        <div class="dec-col">
+          <h5>Regra de decisão</h5>
+          <ul>
+            <li>Dado sensível ou regulado → <strong>Code na Web</strong> (VM descartável)</li>
+            <li>Tarefa operacional, sem compliance → <strong>Cowork</strong> com pasta dedicada</li>
+            <li>Processo longo (horas/dias) → <strong>VPS ou GitHub Actions</strong>, nunca o agente</li>
+          </ul>
+        </div>
+        <div class="dec-col">
+          <h5>Limites importantes</h5>
+          <ul>
+            <li>Code na Web: timeout 2 min · janela 5h compartilhada</li>
+            <li>Cowork: VM persiste · sem audit log · sem EDR/DLP/SIEM</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="decision-item">
+      <summary>
+        <span class="dec-num">03</span>
+        <div class="dec-content">
+          <div class="dec-question">Como protegemos credenciais corporativas?</div>
+          <div class="dec-answer"><strong>MCP Gateway centralizado</strong> — nunca credenciais raw no agente.</div>
+        </div>
+        <span class="dec-toggle">+</span>
+      </summary>
+      <div class="dec-detail">
+        <div class="dec-col">
+          <h5>O que é</h5>
+          <ul>
+            <li>Proxy interno que detém todas as API keys (FactSet, S&P, Daloopa)</li>
+            <li>O agente do analista chama o gateway — nunca vê a credencial</li>
+            <li>Auditável e revogável por usuário</li>
+          </ul>
+        </div>
+        <div class="dec-col">
+          <h5>O que evitar</h5>
+          <ul>
+            <li>API keys em arquivos do projeto distribuído</li>
+            <li>Connectors com credenciais por analista</li>
+            <li>Computer Use ligado por padrão (vetor de prompt injection)</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="decision-item">
+      <summary>
+        <span class="dec-num">04</span>
+        <div class="dec-content">
+          <div class="dec-question">Como padronizamos processos do time?</div>
+          <div class="dec-answer"><strong>Projects + Skills</strong> — Project carrega contexto, Skill carrega procedimento.</div>
+        </div>
+        <span class="dec-toggle">+</span>
+      </summary>
+      <div class="dec-detail">
+        <div class="dec-col">
+          <h5>Projects (contexto)</h5>
+          <ul>
+            <li>Um por mesa ou por cliente — isolamento de contexto</li>
+            <li>Brand book, glossário interno, exemplos passados</li>
+            <li>Memória acumulada entre sessões</li>
+          </ul>
+        </div>
+        <div class="dec-col">
+          <h5>Skills (procedimento)</h5>
+          <ul>
+            <li>Globais — fluxos repetíveis: pitchbook, KYC, fechamento</li>
+            <li>Plano Team/Enterprise: permissão "usar" ≠ "editar"</li>
+            <li>Skill se anexa ao Project — herda contexto sem duplicar</li>
+          </ul>
+        </div>
+        <div class="dec-fullrow">
+          <h5>Comparação rápida</h5>
+          <table class="mini-table compact-mini">
+            <tr><th>Capacidade</th><th>Skill</th><th>Project</th></tr>
+            <tr><td>Processo reutilizável</td><td class="good">✓</td><td class="good">✓ (via system prompt)</td></tr>
+            <tr><td>Arquivos de referência</td><td class="muted">—</td><td class="good">✓</td></tr>
+            <tr><td>Memória ao longo do tempo</td><td class="muted">—</td><td class="good">✓</td></tr>
+            <tr><td>Compartilhamento + permissões</td><td class="muted">—</td><td class="good">✓ Team/Enterprise</td></tr>
+            <tr><td>Isolamento entre clientes</td><td class="muted">—</td><td class="good">✓</td></tr>
+          </table>
+          <p class="dec-quote">A maioria dos times escolhe um só e fica se perguntando por que os outputs são inconsistentes — a resposta é usar os dois.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="decision-item">
+      <summary>
+        <span class="dec-num">05</span>
+        <div class="dec-content">
+          <div class="dec-question">O que fica fora do escopo atual?</div>
+          <div class="dec-answer"><strong>Cowork em fluxos regulados</strong> — até audit log existir.</div>
+        </div>
+        <span class="dec-toggle">+</span>
+      </summary>
+      <div class="dec-detail">
+        <div class="dec-col">
+          <h5>Por quê</h5>
+          <ul>
+            <li>Cowork não gera audit log em nenhum plano (gap reconhecido)</li>
+            <li>EDR/DLP/SIEM corporativos não enxergam a VM por design</li>
+            <li>Bug aberto #47488: sub-agents rodam só em Haiku</li>
+          </ul>
+        </div>
+        <div class="dec-col">
+          <h5>Quando reavaliar</h5>
+          <ul>
+            <li>Quando Anthropic publicar audit log para Cowork</li>
+            <li>Quando o bug do sub-agent forçado a Haiku for corrigido</li>
+            <li>Monitorar GitHub Issue #47488 e changelog Cowork</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ 12 — GLOSSÁRIO ============ -->
+<section id="glossary" class="section dark">
+  <div class="section-head">
+    <span class="section-num">12</span>
+    <h2>Glossário · termos técnicos</h2>
+    <p class="section-sub">Click para expandir. Padronize a linguagem do time.</p>
+  </div>
+
+  <div class="glossary-grid">
+    <details class="gloss-item">
+      <summary>VirtioFS</summary>
+      <p>Protocolo de filesystem compartilhado entre VM e host. No Cowork, a pasta conectada do usuário é montada via VirtioFS dentro da VM. Arquivos escritos pelo agente aparecem instantaneamente no host — sem etapa de cópia.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>MCP (Model Context Protocol)</summary>
+      <p>Protocolo aberto da Anthropic para conectar Claude a sistemas externos (bancos, APIs, drives). Cada "connector" é um servidor MCP — pode ser stdio (local) ou remoto.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>MCP Gateway</summary>
+      <p>Proxy corporativo que centraliza credenciais. O agente do analista chama o gateway sem nunca ver a API key. Auditável, revogável, recomendado para qualquer adoção em escala.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Computer Use</summary>
+      <p>Capacidade do Claude de controlar mouse, teclado e tela do usuário. No Cowork roda no host sem sandbox — é o vetor de prompt injection mais perigoso. Manter OFF por padrão.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Hooks (PreToolUse)</summary>
+      <p>Pontos de interceptação que inspecionam e podem bloquear cada chamada de ferramenta antes da execução — enforcement em tempo real. <strong>Não confundir com audit log</strong>: hooks atuam no momento, mas não persistem trilha auditável centralizada. Cowork tem hooks mas não tem audit log; Code Enterprise tem ambos. Disponível em Cowork e Code, não em Chat.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Connectors</summary>
+      <p>Integrações governadas com sistemas externos: FactSet, Google Drive, Slack, Daloopa, S&P. Implementadas via MCP. Diferente de "biblioteca instalada via pip" — connectors têm controle de permissão da Anthropic.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Sandbox</summary>
+      <p>Isolamento kernel-level que restringe escrita ao diretório de trabalho e roteia rede via allowlist. No Code: Seatbelt (macOS), bubblewrap (Linux/WSL2). No Windows nativo: não suportado — usar Docker.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Managed Agents</summary>
+      <p>Modo autônomo da plataforma Anthropic — Claude executa sessões longas com audit log nativo no Console. Defensável para compliance. Usado pelo modo Cookbook dos Financial Services.</p>
+    </details>
+    <details class="gloss-item">
+      <summary>Effort Control</summary>
+      <p>Slider ao lado do seletor de modelo (Opus 4.8+). Aumentando, Claude raciocina mais profundamente (consumindo mais limite); reduzindo, responde mais rápido.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 13 — REFERÊNCIAS ============ -->
+<section id="references" class="section">
+  <div class="section-head">
+    <span class="section-num">13</span>
+    <h2>Referências</h2>
+    <p class="section-sub">Fontes oficiais e documentação técnica usadas neste briefing.</p>
+  </div>
+
+  <ul class="refs-list">
+    <li><a href="https://code.claude.com/docs/en/claude-code-on-the-web">Documentação oficial · Claude Code na Web</a></li>
+    <li><a href="https://code.claude.com/docs/en/sandboxing">Documentação oficial · Sandboxing</a></li>
+    <li><a href="https://support.claude.com/en/articles/14479288-claude-cowork-desktop-architecture-overview">Arquitetura do Cowork Desktop</a></li>
+    <li><a href="https://code.claude.com/docs/en/desktop-quickstart">Claude Code Desktop · Quickstart</a></li>
+    <li><a href="https://www.anthropic.com/engineering/how-we-contain-claude">Como a Anthropic contém o Claude (Eng Blog, mai/2026)</a></li>
+    <li><a href="https://github.com/anthropics/claude-code/issues/47488">GitHub Issue #47488 · bug Cowork sub-agent</a></li>
+    <li>PromptArmor (jan/2026) · demonstração de prompt injection via Word</li>
+    <li>CVE-2025-59536 e CVE-2026-21852 · vulnerabilidades documentadas no Claude Code</li>
+  </ul>
+</section>
+
+<footer class="footer">
+  <div class="footer-left">
+    <strong>Anthropic Stack · Briefing Executivo</strong><br />
+    Setter · Junho 2026
+  </div>
+  <div class="footer-right">
+    Consolidado a partir de documentação oficial Anthropic (support.claude.com, code.claude.com), GitHub anthropics/claude-code, PromptArmor, Anthropic Engineering Blog.
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

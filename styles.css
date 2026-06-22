@@ -240,6 +240,11 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
 }
 .hc-text strong { color: var(--white); font-weight: 500; }
 .hc-text em { color: var(--gold-soft); font-style: italic; font-weight: 400; }
+/* hero-cards reaproveitados em seção clara (ex.: Resumo) — texto escuro legível */
+.section:not(.dark) .hc-label { color: var(--gold); }
+.section:not(.dark) .hc-text { color: var(--ink-soft); }
+.section:not(.dark) .hc-text strong { color: var(--navy); }
+.section:not(.dark) .hc-text em { color: var(--gold); }
 
 .hero-meta {
   display: flex;
@@ -288,6 +293,9 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
 .section.dark code { background: rgba(255,255,255,0.08); color: var(--gold-soft); }
 .section.dark ul li { color: rgba(255,255,255,0.78); }
 .section.dark ol li { color: rgba(255,255,255,0.78); }
+.section.dark a { color: var(--gold-soft); text-decoration: underline; text-underline-offset: 2px; }
+.section.dark a:hover { color: var(--white); }
+.section.dark .muted { color: rgba(255,255,255,0.6); }
 
 .section-head {
   position: relative;
@@ -742,6 +750,18 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
   letter-spacing: -0.005em;
 }
 .callout p { color: var(--ink); margin: 0.4rem 0 0; font-size: 0.95rem; line-height: 1.55; }
+/* callout dentro de seção escura — fundo translúcido escuro + texto claro */
+.cw-note {
+  background: rgba(58, 109, 196, 0.10);
+  border-top: 1px solid rgba(120, 160, 230, 0.3);
+  border-right: 1px solid rgba(120, 160, 230, 0.3);
+  border-bottom: 1px solid rgba(120, 160, 230, 0.3);
+  border-left: 2px solid #6e9bf0;
+}
+.section.dark .cw-note .callout-title { color: #8fb4f0; }
+.section.dark .cw-note p { color: rgba(255,255,255,0.86); }
+.section.dark .cw-note p strong { color: var(--white); }
+.section.dark .cw-note p em { color: var(--gold-soft); font-style: italic; }
 
 /* ============ BUG CARD ============ */
 .bug-card {
@@ -1531,6 +1551,8 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
 }
 .footer-left { font-size: 0.78rem; }
 .footer-right { max-width: 600px; text-align: right; font-size: 0.78rem; }
+.footer a { color: var(--gold-soft); text-decoration: underline; text-underline-offset: 2px; }
+.footer a:hover { color: var(--white); }
 
 /* ============ MCP SERVER SECTION ============ */
 .lead-dark {

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects · Chat × Cowork | Setter Investimentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="topbar">
+  <a class="brand" href="index.html" style="text-decoration:none;">
+    <div class="logo-mark" aria-label="Anthropic">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M13.827 3.52h3.603L24 20h-3.603l-1.397-3.546h-5.892L11.711 20H8.108L13.827 3.52zM18.176 13.46l-2.078-5.298-2.078 5.298h4.156zM0 20l5.719-16.48h3.522L3.522 20H0z"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="brand-title">Anthropic Stack</div>
+      <div class="brand-sub">Briefing Executivo · Setter</div>
+    </div>
+  </a>
+  <nav class="topnav">
+    <a href="index.html#overview">Produtos</a>
+    <a href="index.html#concepts">Conceitos</a>
+    <a href="index.html#environments">Execução</a>
+    <a href="index.html#sharing">Distribuir</a>
+    <a href="projects.html" class="nav-projects">Projects ↗</a>
+    <a href="index.html#decision">Decisão</a>
+    <a href="index.html#glossary">Glossário</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Projects · Junho 2026</div>
+    <h1>Projects: Chat × Cowork.</h1>
+    <p class="hero-lead">
+      A diferença fundamental <strong>não é "quantidade de funcionalidades"</strong> — é a <strong>natureza do produto</strong>. Dela decorre tudo o mais: compartilhamento, armazenamento e formatos aceitos. Conteúdo verificado contra a documentação oficial da Anthropic, com citações textuais.
+    </p>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hc-label">Chat (nuvem)</div>
+        <div class="hc-text">Conversa que <em>você conduz passo a passo</em>. Vive na nuvem → é o único que <strong>distribui contexto ao time</strong> (Team/Enterprise).</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Cowork (local)</div>
+        <div class="hc-text">Delegação <em>agêntica</em> que roda no seu PC. Age sobre arquivos reais → mais poderoso, <strong>mas não compartilha</strong>.</div>
+      </div>
+      <div class="hero-card warn">
+        <div class="hc-label">Frase oficial</div>
+        <div class="hc-text">"Chat é para quando o resultado é um <strong>pensamento na sua cabeça</strong>; Cowork é para quando o resultado é <strong>algo que você vai entregar a alguém</strong>."</div>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Fonte: support.claude.com e claude.com/resources · verificado com citações textuais</span>
+      <a href="#quadro" class="hero-cta">Ir ao quadro comparativo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 — DIFERENÇA FUNDAMENTAL ============ -->
+<section id="fundamental" class="section">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2>A diferença fundamental</h2>
+    <p class="section-sub">O paradoxo que parece contraditório, explicado: o Cowork é <em>mais poderoso</em> mas <em>não compartilha</em> — exatamente <strong>porque</strong> é local.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">Chat = conversa na nuvem · Cowork = delegação agêntica local</div>
+    <p>O <strong>Cowork age sobre arquivos reais</strong> (escreve, renderiza, salva na pasta) — por isso é local e desktop-only, e por isso <strong>não distribui contexto ao time</strong>. O <strong>Chat age menos</strong> (lê e raciocina), mas vive na nuvem — por isso é <strong>o único que compartilha</strong>. A limitação de um é a consequência direta da força do outro.</p>
+  </div>
+</section>
+
+<!-- ============ 02 — QUADRO COMPARATIVO ============ -->
+<section id="quadro" class="section dark">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2>Quadro comparativo · ponto a ponto</h2>
+    <p class="section-sub">Cada linha confirmada na documentação oficial. As diferenças marcadas em <span style="color:#ffb464;">âmbar</span> são as decisivas para o time.</p>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Dimensão</th>
+        <th>Project no Chat</th>
+        <th>Project no Cowork</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Natureza</strong></td>
+        <td>Lê/raciocina sobre a base; você dirige cada passo</td>
+        <td>Agêntico: delega o objetivo, ele age e devolve pronto</td>
+      </tr>
+      <tr>
+        <td><strong>Armazenamento</strong></td>
+        <td class="yes">Nuvem · acessível de qualquer lugar</td>
+        <td class="warn">Local, desktop-only · sem sync na nuvem</td>
+      </tr>
+      <tr>
+        <td><strong>Compartilhamento</strong></td>
+        <td class="yes">Sim — só Team/Enterprise (Can view / Can edit)</td>
+        <td class="no">Não — nem em Team/Enterprise</td>
+      </tr>
+      <tr>
+        <td><strong>Memória</strong></td>
+        <td class="no">Não retida entre sessões isoladas</td>
+        <td class="yes">Habilitada (dentro do mesmo project)</td>
+      </tr>
+      <tr>
+        <td><strong>Execução na máquina</strong></td>
+        <td class="no">Nenhuma</td>
+        <td class="yes">Escreve / renderiza / salva arquivos reais</td>
+      </tr>
+      <tr>
+        <td><strong>Tarefas agendadas</strong></td>
+        <td class="no">Não</td>
+        <td class="yes">Sim · recorrentes por project</td>
+      </tr>
+      <tr>
+        <td><strong>Contexto</strong></td>
+        <td>Knowledge base (uploads) + instruções</td>
+        <td>Pasta local + link de project do Chat + URL</td>
+      </tr>
+      <tr>
+        <td><strong>Plataforma</strong></td>
+        <td>Web · mobile · desktop</td>
+        <td class="warn">Só Claude Desktop (planos pagos)</td>
+      </tr>
+      <tr>
+        <td><strong>Claude Code</strong></td>
+        <td class="muted">—</td>
+        <td class="no">Não disponível · planejado</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="muted" style="margin-top:1rem;font-size:0.85rem;">Citação oficial (Cowork): <em>"Projects are only available in Cowork, not in Claude Code. Support for Claude Code is planned for a future update."</em></p>
+</section>
+
+<!-- ============ 03 — COMPARTILHAMENTO POR PLANO ============ -->
+<section id="planos" class="section">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <h2>Compartilhamento por plano · atenção</h2>
+    <p class="section-sub">Ponto que costuma gerar erro: compartilhar projects do Chat é exclusivo de <strong>Team e Enterprise</strong> — <strong>não</strong> vale para Pro nem Max.</p>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Plano</th>
+        <th>Tem projects?</th>
+        <th>Compartilha project? (Chat)</th>
+        <th>Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Free</strong></td>
+        <td class="warn">Até 5 projects</td>
+        <td class="no">Não</td>
+        <td class="muted">"Free users can create a maximum of five projects."</td>
+      </tr>
+      <tr>
+        <td><strong>Pro</strong></td>
+        <td class="yes">Sim (com RAG)</td>
+        <td class="no">Não</td>
+        <td class="muted">Tem project + RAG, mas não compartilha</td>
+      </tr>
+      <tr>
+        <td><strong>Max</strong></td>
+        <td class="yes">Sim (com RAG)</td>
+        <td class="no">Não</td>
+        <td class="muted">Tem project + RAG, mas não compartilha</td>
+      </tr>
+      <tr>
+        <td><strong>Team</strong></td>
+        <td class="yes">Sim</td>
+        <td class="yes">Sim · Can view / Can edit</td>
+        <td class="muted">Compartilha dentro da organização</td>
+      </tr>
+      <tr>
+        <td><strong>Enterprise</strong></td>
+        <td class="yes">Sim</td>
+        <td class="yes">Sim · Can view / Can edit</td>
+        <td class="muted">Compartilha dentro da organização</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">Cuidado com a confusão "planos pagos"</div>
+    <p>A documentação é taxativa: <em>"Project visibility and sharing features are available to users on <strong>Team or Enterprise</strong> plans."</em> Pro e Max <strong>têm</strong> projects e RAG na base de conhecimento — só <strong>não têm</strong> o recurso de compartilhar o project com outras pessoas. E no Cowork: <em>"For members of Team and Enterprise plans, Cowork projects do not support project sharing."</em></p>
+  </div>
+</section>
+
+<!-- ============ 04 — FORMATOS DE ARQUIVO ============ -->
+<section id="arquivos" class="section dark">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <h2>Arquivos · dois caminhos diferentes</h2>
+    <p class="section-sub">É preciso separar "upload no Chat" de "Cowork agindo na pasta" — as regras são diferentes.</p>
+  </div>
+
+  <h3 class="sub-h3">Caminho A — Upload no Chat (knowledge base)</h3>
+  <p>Lista oficial atual de formatos de documento aceitos no upload:</p>
+  <p style="margin:0.8rem 0;"><code>PDF</code> <code>DOCX</code> <code>CSV</code> <code>TXT</code> <code>HTML</code> <code>ODT</code> <code>RTF</code> <code>EPUB</code> <code>JSON</code> <code>XLSX</code></p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Formato</th>
+        <th>Aceito?</th>
+        <th>Detalhe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PDF</strong></td>
+        <td class="yes">Sim</td>
+        <td>Até 100 págs.: texto + visual (gráficos/imagens). 100–1000: padrão. &gt;1000: só texto.</td>
+      </tr>
+      <tr>
+        <td><strong>XLSX</strong></td>
+        <td class="warn">Sim, com condição</td>
+        <td>Exige <em>code execution + file creation</em> ativado na conta.</td>
+      </tr>
+      <tr>
+        <td><strong>PPTX / PPT</strong></td>
+        <td class="no">Não</td>
+        <td>Claude <em>cria</em> .pptx, mas não aceita como entrada. <strong>Converta para PDF antes de subir.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>.py e outros</strong></td>
+        <td class="no">Fora da lista</td>
+        <td>Sendo texto puro, o caminho confiável é colar o conteúdo na conversa.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-h3" style="margin-top:2rem;">Caminho B — Cowork agindo na pasta local</h3>
+  <div class="callout callout-info">
+    <div class="callout-title">No Cowork não há "etapa de upload"</div>
+    <p>O Cowork acessa os arquivos <strong>direto na pasta local</strong> — por isso a documentação dele <strong>não traz lista de formatos restritos</strong>. Na prática é por isso que faz sentido dizer que "o Cowork lida com .pptx": ele <strong>lê e escreve o arquivo na pasta</strong>, não o "ingere" numa base de conhecimento. A restrição da lista (PDF, DOCX…) é uma regra do <strong>mecanismo de upload do Chat</strong>, não do Cowork.</p>
+  </div>
+</section>
+
+<!-- ============ 05 — RESUMO / QUANDO USAR ============ -->
+<section id="resumo" class="section">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <h2>Resumo · em uma linha</h2>
+    <p class="section-sub">A decisão prática para o time.</p>
+  </div>
+
+  <div class="hero-cards" style="border-top:1px solid var(--line);padding-top:1.5rem;">
+    <div class="hero-card">
+      <div class="hc-label">Cowork</div>
+      <div class="hc-text">Local, agêntico, com memória e agendamento, <strong>produz o entregável</strong> (inclusive .pptx na pasta) — <strong>mas não compartilha</strong>.</div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-label">Chat</div>
+      <div class="hc-text">Nuvem, compartilhável <strong>só em Team/Enterprise</strong>, guarda instruções + conhecimento — <strong>mas não executa</strong> e não aceita .pptx no upload (só via PDF).</div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-label">Regra de decisão</div>
+      <div class="hc-text">Distribuir contexto ao time → <strong>só Chat (Team/Enterprise)</strong>. Produzir o entregável automaticamente → <strong>Cowork</strong>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FONTES ============ -->
+<section id="fontes" class="section dark">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <h2>Fontes oficiais</h2>
+    <p class="section-sub">Documentação Anthropic — verificada com citações textuais em junho de 2026.</p>
+  </div>
+  <ul>
+    <li><a href="https://claude.com/resources/tutorials/choosing-between-claude-cowork-or-chat">Choosing between Claude Cowork or Chat</a></li>
+    <li><a href="https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork">Organize your tasks with projects in Claude Cowork</a></li>
+    <li><a href="https://support.claude.com/en/articles/9517075-what-are-projects">What are projects?</a></li>
+    <li><a href="https://support.claude.com/en/articles/9519189-manage-project-visibility-and-sharing">Manage project visibility and sharing</a></li>
+    <li><a href="https://support.claude.com/en/articles/8241126-upload-files-to-claude">Upload files to Claude</a></li>
+  </ul>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-left">
+    <strong>Anthropic Stack · Projects: Chat × Cowork</strong><br />
+    Setter · Junho 2026 · <a href="index.html">← Voltar ao briefing</a>
+  </div>
+  <div class="footer-right">
+    Consolidado a partir da documentação oficial Anthropic (support.claude.com, claude.com). Conteúdo verificado com citações textuais.
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

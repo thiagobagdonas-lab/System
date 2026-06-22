@@ -125,6 +125,15 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
   letter-spacing: 0.04em;
 }
 .topnav a:hover { color: var(--navy); border-bottom-color: var(--gold); }
+.topnav a.nav-projects {
+  color: var(--navy);
+  font-weight: 700;
+  background: var(--paper-soft);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border-bottom: none;
+}
+.topnav a.nav-projects:hover { background: var(--gold-soft); color: var(--navy-deep); }
 
 /* ============ HERO ============ */
 .hero {

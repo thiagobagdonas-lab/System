@@ -158,11 +158,18 @@
     <p class="section-sub">Ponto que costuma gerar erro: compartilhar projects do Chat é exclusivo de <strong>Team e Enterprise</strong> — <strong>não</strong> vale para Pro nem Max.</p>
   </div>
 
+  <div class="callout callout-info">
+    <div class="callout-title">O que é "RAG" — e para que serve na prática</div>
+    <p>Todo modelo tem um limite de quanto texto consegue "enxergar" de uma vez (a janela de contexto). <strong>Sem RAG</strong>, a base de conhecimento do project precisa caber inteira nesse limite — então você só pode subir poucos arquivos antes de o Claude começar a ignorar o restante.</p>
+    <p><strong>Com RAG</strong> (<em>Retrieval-Augmented Generation</em>), você pode jogar <strong>muito material</strong> no project — dezenas de relatórios, um manual inteiro, anos de atas — e, a cada pergunta, o Claude <strong>busca sozinho só os trechos relevantes</strong> e responde com base neles. Na prática: a base pode ser enorme sem perder precisão nem ficar lenta. É isso que torna o project útil como uma <strong>biblioteca de referência</strong>, e não só um punhado de anexos. Disponível em <strong>todos os planos pagos</strong> (Pro, Max, Team, Enterprise); só o <strong>Free</strong> não tem.</p>
+  </div>
+
   <table class="comp-table">
     <thead>
       <tr>
         <th>Plano</th>
         <th>Tem projects?</th>
+        <th>Base com RAG?</th>
         <th>Compartilha project? (Chat)</th>
         <th>Observação</th>
       </tr>
@@ -170,33 +177,38 @@
     <tbody>
       <tr>
         <td><strong>Free</strong></td>
-        <td class="warn">Até 5 projects</td>
+        <td class="warn">Sim · até 5</td>
+        <td class="no">Não</td>
         <td class="no">Não</td>
         <td class="muted">"Free users can create a maximum of five projects."</td>
       </tr>
       <tr>
         <td><strong>Pro</strong></td>
-        <td class="yes">Sim (com RAG)</td>
+        <td class="yes">Sim</td>
+        <td class="yes">Sim</td>
         <td class="no">Não</td>
-        <td class="muted">Tem project + RAG, mas não compartilha</td>
+        <td class="muted">Project completo, mas individual — não compartilha</td>
       </tr>
       <tr>
         <td><strong>Max</strong></td>
-        <td class="yes">Sim (com RAG)</td>
+        <td class="yes">Sim</td>
+        <td class="yes">Sim</td>
         <td class="no">Não</td>
-        <td class="muted">Tem project + RAG, mas não compartilha</td>
+        <td class="muted">Project completo, mas individual — não compartilha</td>
       </tr>
       <tr>
         <td><strong>Team</strong></td>
         <td class="yes">Sim</td>
+        <td class="yes">Sim</td>
         <td class="yes">Sim · Can view / Can edit</td>
-        <td class="muted">Compartilha dentro da organização</td>
+        <td class="muted">Tudo do Pro/Max + compartilha na organização</td>
       </tr>
       <tr>
         <td><strong>Enterprise</strong></td>
         <td class="yes">Sim</td>
+        <td class="yes">Sim</td>
         <td class="yes">Sim · Can view / Can edit</td>
-        <td class="muted">Compartilha dentro da organização</td>
+        <td class="muted">Tudo do Pro/Max + compartilha na organização</td>
       </tr>
     </tbody>
   </table>

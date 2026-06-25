@@ -738,46 +738,133 @@
 <section id="financial" class="section dark">
   <div class="section-head">
     <span class="section-num">06</span>
-    <h2>Financial Services · skills prontas para gestoras</h2>
-    <p class="section-sub">A Anthropic lançou em mai/2026 dez templates para os fluxos mais demorados em serviços financeiros.</p>
+    <h2>Financial Services · skills oficiais da Anthropic para M&A</h2>
+    <p class="section-sub">Repositório oficial <a href="https://github.com/anthropics/financial-services" target="_blank" rel="noopener"><code>anthropics/financial-services</code></a> (Apache-2.0): 10 agentes nomeados, 9 bundles verticais e dezenas de skills para investment banking, equity research, private equity e wealth. Mesmo system prompt como plugin (Cowork/Code) ou via API (Managed Agents) — você escolhe onde roda.</p>
   </div>
 
-  <div class="fs-grid">
-    <div class="fs-template">Pitchbooks</div>
-    <div class="fs-template">Triagem KYC</div>
-    <div class="fs-template">Month-end close</div>
-    <div class="fs-template">Pesquisa de mercado</div>
-    <div class="fs-template">+6 templates</div>
+  <div class="callout mcp-recommend">
+    <div class="callout-title">O que cobre para uma assessoria de M&A</div>
+    <p>Os bundles <strong>investment-banking</strong> + <strong>financial-analysis</strong> (core) e os agentes <strong>Pitch Agent</strong>, <strong>Model Builder</strong> e <strong>Market Researcher</strong> cobrem o ciclo do deal de ponta a ponta — pitch books, comps, DCF, LBO, merger models, CIMs, teasers, buyer lists, due diligence e IC memos. Tudo gera <em>rascunho de produto de analista</em> para revisão humana: não emite recomendação de investimento nem executa transações.</p>
   </div>
 
-  <div class="duo-grid">
-    <div class="duo-card">
-      <div class="duo-eyebrow">MODO ASSISTIDO</div>
-      <div class="duo-headline">Junto com o analista (Plugin)</div>
-      <p>Skill instalada como plugin em Cowork ou Code, rodando no desktop do profissional. Bom para análises iterativas com humano no loop.</p>
-      <ul>
-        <li>No Cowork: sub-agents forçados a Haiku (bug §04)</li>
-        <li>No Code: sub-agents com controle total de modelo</li>
-      </ul>
-    </div>
-    <div class="duo-card">
-      <div class="duo-eyebrow">MODO AUTÔNOMO</div>
-      <div class="duo-headline">Claude Managed Agents (Cookbook)</div>
-      <p>Sessões longas autônomas no infraestrutura da Anthropic, sem precisar do desktop do analista. <strong>Audit log completo</strong> no Console. Defensável para compliance.</p>
-      <ul>
-        <li>Sem dependência do desktop do analista</li>
-        <li>Rastreabilidade nativa</li>
-      </ul>
+  <div style="margin:0 auto 0.5rem;">
+    <div style="font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin-bottom:0.7rem;">Onde encontrar · links oficiais</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
+      <a href="https://github.com/anthropics/financial-services" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid rgba(210,168,95,0.45);background:rgba(201,164,92,0.06);border-radius:4px;padding:0.5rem 1rem;font-size:0.84rem;font-weight:500;color:var(--gold-soft);text-decoration:none;">Repositório no GitHub ↗</a>
+      <a href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid rgba(210,168,95,0.45);background:rgba(201,164,92,0.06);border-radius:4px;padding:0.5rem 1rem;font-size:0.84rem;font-weight:500;color:var(--gold-soft);text-decoration:none;">Bundles &amp; skills ↗</a>
+      <a href="https://github.com/anthropics/financial-services/tree/main/plugins/agent-plugins" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid rgba(210,168,95,0.45);background:rgba(201,164,92,0.06);border-radius:4px;padding:0.5rem 1rem;font-size:0.84rem;font-weight:500;color:var(--gold-soft);text-decoration:none;">Agentes ↗</a>
+      <a href="https://support.claude.com/en/articles/13851150-install-financial-services-plugins-for-cowork" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid rgba(210,168,95,0.45);background:rgba(201,164,92,0.06);border-radius:4px;padding:0.5rem 1rem;font-size:0.84rem;font-weight:500;color:var(--gold-soft);text-decoration:none;">Guia de instalação (Cowork) ↗</a>
     </div>
   </div>
 
-  <h3 class="sub-h3">Connectors incluídos</h3>
+  <h3 class="sub-h3">Cobertura do ciclo do deal</h3>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Fase do deal</th><th>Skills · comandos rápidos</th><th>Agente · bundle</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Originação &amp; pitch</td>
+        <td><code>/teaser</code> <code>/cim</code> <code>/buyer-list</code> <code>/one-pager</code> <code>/process-letter</code> <code>/deal-tracker</code> · pitch-deck</td>
+        <td>Pitch Agent · investment-banking</td>
+      </tr>
+      <tr>
+        <td>Valuation &amp; modelagem</td>
+        <td><code>/comps</code> <code>/dcf</code> <code>/lbo</code> <code>/merger-model</code> <code>/returns</code> (IRR/MOIC) · 3-statement</td>
+        <td>Model Builder · Valuation Reviewer · financial-analysis</td>
+      </tr>
+      <tr>
+        <td>Due diligence &amp; comitê</td>
+        <td><code>/dd-checklist</code> <code>/dd-prep</code> <code>/screen-deal</code> <code>/ic-memo</code></td>
+        <td>private-equity</td>
+      </tr>
+      <tr>
+        <td>Research setorial</td>
+        <td>Panorama do setor, landscape competitivo e peer comps → shortlist de alvos <span style="color:rgba(255,255,255,0.5);">(skills sector-overview, idea-generation, thesis-tracker, catalyst-calendar)</span></td>
+        <td>Market Researcher · equity-research</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin:-0.6rem auto 0;"><code>/comando</code> = slash command direto no chat. Nomes sem barra (3-statement, pitch-deck, sector-overview…) = skills nomeadas que o agente da vertical aciona automaticamente.</p>
+
+  <h3 class="sub-h3">9 bundles verticais · cada um instala como plugin</h3>
+  <p style="font-size:0.92rem;color:rgba(255,255,255,0.78);margin:0 auto 1rem;">Cada bundle empacota <strong style="color:var(--gold-soft);">skills</strong> (comandos como <code>/dcf</code>) + <strong style="color:var(--gold-soft);">agentes</strong> autônomos num pacote único. Instala como plugin no Cowork/Code ou roda via API — os três primeiros são o núcleo de M&A. <strong style="color:var(--gold-soft);">Clique em qualquer bundle</strong> para abrir sua pasta no GitHub.</p>
   <div class="connector-grid">
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/financial-analysis" target="_blank" rel="noopener" style="text-decoration:none;">financial-analysis · core</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/investment-banking" target="_blank" rel="noopener" style="text-decoration:none;">investment-banking</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/private-equity" target="_blank" rel="noopener" style="text-decoration:none;">private-equity</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/equity-research" target="_blank" rel="noopener" style="text-decoration:none;">equity-research</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/wealth-management" target="_blank" rel="noopener" style="text-decoration:none;">wealth-management</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/fund-admin" target="_blank" rel="noopener" style="text-decoration:none;">fund-admin</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/operations" target="_blank" rel="noopener" style="text-decoration:none;">operations</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/partner-built/lseg" target="_blank" rel="noopener" style="text-decoration:none;">lseg</a>
+    <a class="conn-pill" href="https://github.com/anthropics/financial-services/tree/main/plugins/partner-built/spglobal" target="_blank" rel="noopener" style="text-decoration:none;">sp-global</a>
+  </div>
+
+  <h3 class="sub-h3">Três agentes autônomos para a originação</h3>
+  <div class="mcp-grid">
+    <div class="mcp-card mcp-card-highlight">
+      <div class="mcp-num">01</div>
+      <h4>Pitch Agent</h4>
+      <p>Reúne múltiplos de mercado e transações precedentes, roda o LBO inicial e gera o esqueleto completo do pitch deck na identidade visual da firma.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">02</div>
+      <h4>Model Builder</h4>
+      <p>Conectado ao Excel: estrutura 3-statement models, audita fórmulas complexas e encontra quebras e inconsistências em planilhas das empresas-alvo.</p>
+    </div>
+    <div class="mcp-card">
+      <div class="mcp-num">03</div>
+      <h4>Market Researcher</h4>
+      <p>Mapeia setor e panorama competitivo, identifica players fragmentados e gera shortlists de alvos a partir das teses da casa.</p>
+    </div>
+  </div>
+  <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);margin-top:0.8rem;"><strong style="color:var(--gold-soft);">Os 10 agentes:</strong> Pitch Agent, Meeting Prep Agent, Market Researcher, Earnings Reviewer, Model Builder, Valuation Reviewer, GL Reconciler, Month-End Closer, Statement Auditor, KYC Screener. Os três acima são o núcleo de originação; os demais cobrem reuniões, research, fund-admin e compliance/KYC.</p>
+
+  <h3 class="sub-h3">Onde roda · três superfícies</h3>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Superfície</th><th>Como instalar</th><th>Quando usar</th><th>Atenção · compliance</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude Cowork (plugin)</td>
+        <td>Settings → Plugins → Add plugin → URL do repo (ou zip)</td>
+        <td>Mesa de analistas, exploração com humano no loop</td>
+        <td class="warn">Sub-agents forçados a Haiku (<a href="#multi-agent">§04</a>) e sem audit log (<a href="#security">§05</a>) — evite fluxos regulados</td>
+      </tr>
+      <tr>
+        <td>Claude Code (CLI / Desktop)</td>
+        <td><code>claude plugin marketplace add anthropics/financial-services</code></td>
+        <td>Quem desenvolve e automatiza; controle total de modelo</td>
+        <td>Audit log no plano Enterprise</td>
+      </tr>
+      <tr>
+        <td>API · Managed Agents <span class="risk-tag risk-medium">beta</span></td>
+        <td>deploy via <code>/v1/agents</code> com os managed-agent-cookbooks</td>
+        <td>Fluxos autônomos atrás do seu workflow engine</td>
+        <td class="yes">Audit log nativo — defensável para compliance</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-h3">Conectores de dados (MCP) inclusos</h3>
+  <p style="font-size:0.92rem;color:rgba(255,255,255,0.78);margin:0 auto 1rem;"><strong style="color:var(--gold-soft);">Mercado:</strong> S&P Global, LSEG, Morningstar · <strong style="color:var(--gold-soft);">M&A &amp; private:</strong> PitchBook, Chronograph · <strong style="color:var(--gold-soft);">Fundamentos:</strong> Daloopa, FactSet · <strong style="color:var(--gold-soft);">Notícias &amp; docs:</strong> MT Newswires, Aiera, Moody's, Egnyte, Box.</p>
+  <div class="connector-grid">
+    <div class="conn-pill">S&P Global</div>
+    <div class="conn-pill">LSEG</div>
+    <div class="conn-pill">Morningstar</div>
+    <div class="conn-pill">PitchBook</div>
     <div class="conn-pill">FactSet</div>
     <div class="conn-pill">Daloopa</div>
-    <div class="conn-pill">S&P Capital IQ</div>
-    <div class="conn-pill">Moody's MCP</div>
-    <div class="conn-pill">+8 novos conectores</div>
+    <div class="conn-pill">Moody's</div>
+    <div class="conn-pill">Chronograph</div>
+    <div class="conn-pill">+4 conectores</div>
+  </div>
+
+  <div class="callout cw-note">
+    <div class="callout-title">Governança · tudo staged para sign-off humano</div>
+    <p>Disclaimer oficial: os agentes <em>rascunham</em> produto de analista — modelos, memos, notas de research, reconciliações — para revisão por um profissional qualificado. <strong>Não fazem recomendação de investimento nem executam transações.</strong> Código aberto sob Apache-2.0, auditável. Para fluxos com obrigação de compliance, rode via <strong>Managed Agents</strong> ou <strong>Code Enterprise</strong> (audit log nativo) — não pelo Cowork (<a href="#security">§05</a>).</p>
   </div>
 </section>
 

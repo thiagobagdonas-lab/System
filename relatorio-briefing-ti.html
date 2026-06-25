@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Briefing Técnico — Provisionamento e Manutenção de VPS | Setter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="topbar">
+  <a class="brand" href="index.html" style="text-decoration:none;">
+    <div class="logo-mark" aria-label="Anthropic">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M13.827 3.52h3.603L24 20h-3.603l-1.397-3.546h-5.892L11.711 20H8.108L13.827 3.52zM18.176 13.46l-2.078-5.298-2.078 5.298h4.156zM0 20l5.719-16.48h3.522L3.522 20H0z"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="brand-title">Anthropic Stack</div>
+      <div class="brand-sub">Briefing Executivo · Setter</div>
+    </div>
+  </a>
+  <nav class="topnav">
+    <a href="index.html">Início</a>
+    <a href="vps-mcp.html" class="nav-vps">Central VPS/MCP ↗</a>
+    <a href="relatorio-executivo-mcp.html">Relatório Executivo MCP →</a>
+  </nav>
+</header>
+
+<!-- ============ BARRA DE AÇÕES FIXA ============ -->
+<div class="rpt-actionbar">
+  <div class="ab-left">
+    <a href="vps-mcp.html">← Central VPS/MCP</a>
+    <span>Relatório 01 · Briefing Técnico TI</span>
+  </div>
+  <div class="rpt-actions">
+    <button class="rpt-btn" data-action="expand-all">Expandir tudo</button>
+    <button class="rpt-btn" data-action="collapse-all">Recolher tudo</button>
+    <button class="rpt-btn rpt-btn-pdf" data-action="print">⬇ Salvar PDF</button>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <nav class="breadcrumb" aria-label="Trilha de navegação">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <a href="vps-mcp.html">VPS / MCP</a>
+      <span class="sep">/</span>
+      <span class="current">Briefing Técnico — VPS</span>
+    </nav>
+    <div class="hero-tag">Relatório 01 · Confidencial</div>
+    <h1>Provisionamento e Manutenção de VPS.</h1>
+    <p class="hero-lead">
+      Briefing técnico para a <strong>prestadora de serviços de TI</strong>. Define a especificação da VPS, o software a instalar, o hardening de segurança, a VPN, a manutenção contínua e o <em>checklist de entrega</em> sem o qual o deploy não inicia.
+    </p>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hc-label">Para / De</div>
+        <div class="hc-text"><strong>Para:</strong> Prestadora de Serviços de TI · <strong>De:</strong> Setter — Área de IA &amp; Dados · <strong>Data:</strong> 24/06/2026</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Divisão de escopo</div>
+        <div class="hc-text">TI gerencia a <strong>infraestrutura</strong> (VPS, SO, rede, segurança). A Setter gerencia a <strong>aplicação</strong> (código, banco, chaves de API).</div>
+      </div>
+      <div class="hero-card warn">
+        <div class="hc-label">Bloqueio de entrega</div>
+        <div class="hc-text">A Setter <strong>não inicia o deploy</strong> sem o checklist da <a class="rpt-xref" href="#sec-8">seção 8</a> completo e validado.</div>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Classificação: Confidencial — uso restrito ao time de TI contratado</span>
+      <a href="#doc" class="hero-cta">Ir ao documento ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCUMENTO ============ -->
+<section id="doc" class="section">
+
+  <!-- Legenda de classificação -->
+  <div class="callout callout-info" style="max-width:980px;margin:0 auto 2rem;">
+    <div class="callout-title">Como ler as classificações deste documento</div>
+    <div class="cls-legend" style="margin-top:0.6rem;">
+      <div><span class="cls cls-req">Obrigatório</span> sem isso a entrega não é aceita e o deploy não inicia</div>
+      <div><span class="cls cls-rec">Recomendado</span> fortemente sugerido; a não adoção deve ser justificada por escrito</div>
+      <div><span class="cls cls-opt">Opcional</span> melhoria desejável, implementar conforme capacidade e acordo contratual</div>
+    </div>
+  </div>
+
+  <!-- Índice -->
+  <nav class="rpt-toc" aria-label="Índice do relatório">
+    <span class="rpt-toc-label">Índice — clique para abrir a seção</span>
+    <button class="rpt-chip" data-target="sec-1"><span class="chip-num">01</span>Contexto</button>
+    <button class="rpt-chip" data-target="sec-2"><span class="chip-num">02</span>Especificações da VPS</button>
+    <button class="rpt-chip" data-target="sec-3"><span class="chip-num">03</span>Software a instalar</button>
+    <button class="rpt-chip" data-target="sec-4"><span class="chip-num">04</span>Configuração de segurança</button>
+    <button class="rpt-chip" data-target="sec-5"><span class="chip-num">05</span>VPN</button>
+    <button class="rpt-chip" data-target="sec-6"><span class="chip-num">06</span>Manutenção contínua</button>
+    <button class="rpt-chip" data-target="sec-7"><span class="chip-num">07</span>Credenciais e chaves</button>
+    <button class="rpt-chip" data-target="sec-8"><span class="chip-num">08</span>Checklist de entrega</button>
+    <button class="rpt-chip" data-target="sec-9"><span class="chip-num">09</span>Contato e escalação</button>
+  </nav>
+
+  <div class="rpt-doc">
+
+    <!-- ===== 1. CONTEXTO ===== -->
+    <details class="rpt-section" id="sec-1" open>
+      <summary>
+        <span class="rpt-sec-num">01</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Enquadramento</span>
+          <span class="rpt-sec-title">Contexto</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>A Setter está implantando um servidor de integração de inteligência artificial para uso interno. O servidor será hospedado em uma VPS dedicada e consumido exclusivamente por aplicativos instalados nas máquinas dos colaboradores — sem exposição de dados públicos ou acesso de terceiros.</p>
+        <p>A equipe interna de IA &amp; Dados gerencia a <strong>camada de aplicação</strong> (código, banco de dados, chaves de API). A prestadora de TI gerencia a <strong>infraestrutura</strong> (VPS, sistema operacional, segurança de rede e manutenção contínua do ambiente).</p>
+      </div>
+    </details>
+
+    <!-- ===== 2. ESPECIFICAÇÕES DA VPS ===== -->
+    <details class="rpt-section" id="sec-2">
+      <summary>
+        <span class="rpt-sec-num">02</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Dimensionamento</span>
+          <span class="rpt-sec-title">Especificações da VPS</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>2.1 Hardware</h4>
+        <p>A aplicação é um processo Python com banco de dados SQLite — não é CPU-intensiva. O gargalo típico é latência de I/O de disco. Os valores abaixo refletem uso esperado com <strong>5–15 usuários simultâneos</strong> e crescimento de dados de <strong>~2–5 GB/ano</strong>.</p>
+        <table class="comp-table">
+          <thead>
+            <tr><th>Recurso</th><th>Mínimo absoluto</th><th>Recomendado</th><th>Classificação</th><th>Observação</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>vCPU</strong></td><td>1</td><td>2</td><td><span class="cls cls-rec">Recomendado</span></td><td>1 core para aplicação + 1 para OS/nginx/serviços</td></tr>
+            <tr><td><strong>RAM</strong></td><td>2 GB</td><td>4 GB</td><td><span class="cls cls-rec">Recomendado</span></td><td>Aplicação usa ~200–400 MB; folga para picos</td></tr>
+            <tr><td><strong>Disco</strong></td><td>20 GB SSD</td><td>40 GB SSD</td><td><span class="cls cls-rec">Recomendado</span></td><td>SO ~5 GB; banco + logs crescem ~2–5 GB/ano</td></tr>
+            <tr><td><strong>Tipo de disco</strong></td><td>SSD</td><td>SSD NVMe</td><td><span class="cls cls-rec">Recomendado</span></td><td>SQLite é sensível a I/O; HDD causa lentidão visível</td></tr>
+            <tr><td><strong>Rede</strong></td><td>100 Mbps</td><td>200 Mbps</td><td><span class="cls cls-rec">Recomendado</span></td><td>Tráfego real baixo (~1–5 Mbps em pico)</td></tr>
+            <tr><td><strong>IP estático</strong></td><td>—</td><td>IPv4 dedicado</td><td><span class="cls cls-req">Obrigatório</span></td><td>Necessário para DNS e certificado TLS</td></tr>
+            <tr><td><strong>OS</strong></td><td>—</td><td>Ubuntu 22.04 LTS</td><td><span class="cls cls-req">Obrigatório</span></td><td>Não serão aceitas outras distros</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Planos de referência por provedor</h4>
+        <table class="comp-table">
+          <thead>
+            <tr><th>Provedor</th><th>Plano</th><th>vCPU</th><th>RAM</th><th>Disco</th><th>Custo estimado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Hetzner Cloud</strong></td><td>CX21</td><td>2</td><td>4 GB</td><td>40 GB SSD</td><td>~€4/mês (~R$ 25)</td></tr>
+            <tr><td><strong>DigitalOcean</strong></td><td>Basic Droplet</td><td>2</td><td>4 GB</td><td>80 GB SSD</td><td>~$24/mês (~R$ 130)</td></tr>
+            <tr><td><strong>AWS Lightsail</strong></td><td>Plano 4 GB</td><td>2</td><td>4 GB</td><td>80 GB SSD</td><td>~$20/mês (~R$ 110)</td></tr>
+            <tr><td><strong>Vultr</strong></td><td>Cloud Compute</td><td>2</td><td>4 GB</td><td>80 GB SSD</td><td>~$24/mês (~R$ 130)</td></tr>
+          </tbody>
+        </table>
+        <div class="rpt-note">Hetzner CX21 para prioridade de <strong>custo</strong>; DigitalOcean São Paulo para prioridade de <strong>latência</strong>.</div>
+        <p><strong>Quando escalar:</strong> CPU consistentemente acima de 70% ou banco SQLite acima de 20 GB — improvável no horizonte de 12 meses.</p>
+
+        <h4>2.2 Requisitos do provedor</h4>
+        <table class="comp-table">
+          <thead><tr><th>Recurso do provedor</th><th>Classificação</th></tr></thead>
+          <tbody>
+            <tr><td>Console de acesso out-of-band (recuperação independente de SSH)</td><td><span class="cls cls-req">Obrigatório</span></td></tr>
+            <tr><td>IPv4 estático dedicado</td><td><span class="cls cls-req">Obrigatório</span></td></tr>
+            <tr><td>Snapshots automáticos configuráveis</td><td><span class="cls cls-rec">Recomendado</span></td></tr>
+            <tr><td>Suporte a Ubuntu 22.04 LTS</td><td><span class="cls cls-req">Obrigatório</span></td></tr>
+          </tbody>
+        </table>
+
+        <h4>2.3 DNS</h4>
+        <div class="rpt-note crit"><span class="cls cls-req">Obrigatório</span> — Um subdomínio será apontado para o IP da VPS. A Setter fornece o nome do subdomínio. O TI deve confirmar o IP estático para que o time interno crie o registro A, ou executar o apontamento se tiver acesso ao painel DNS da Setter.</div>
+      </div>
+    </details>
+
+    <!-- ===== 3. SOFTWARE ===== -->
+    <details class="rpt-section" id="sec-3">
+      <summary>
+        <span class="rpt-sec-num">03</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Instalação</span>
+          <span class="rpt-sec-title">Software a ser instalado pelo TI</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>A camada de aplicação (código Python, banco de dados, containers) é gerenciada pela Setter e <strong>não é escopo do TI</strong>.</p>
+
+        <h4>3.1 Pacotes do sistema <span class="cls cls-req">Obrigatório</span></h4>
+        <p>Todos os pacotes abaixo devem estar instalados antes da entrega:</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · pacotes base</div>
+          <pre>apt install -y \
+  python3.11 python3.11-venv python3.11-dev python3-pip \
+  git curl wget htop \
+  nginx \
+  certbot python3-certbot-nginx \
+  fail2ban \
+  ufw \
+  sqlite3 \
+  unattended-upgrades</pre>
+        </div>
+
+        <h4>3.2 nginx <span class="cls cls-req">Obrigatório</span></h4>
+        <p>Utilizado como reverse proxy com terminação TLS. O TI instala, habilita e confirma que o serviço está ativo. A configuração do <code>server block</code> (virtual host) é responsabilidade da Setter.</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · habilitar nginx</div>
+          <pre>systemctl enable nginx
+systemctl start nginx</pre>
+        </div>
+
+        <h4>3.3 Certbot / Let's Encrypt <span class="cls cls-req">Obrigatório</span></h4>
+        <p>O TI instala o Certbot. A emissão do certificado é executada pela Setter após propagação do DNS.</p>
+
+        <h4>3.4 Docker <span class="cls cls-opt">Opcional</span></h4>
+        <p>A decisão de usar Docker para containerização é da Setter e será comunicada antes do deploy. O TI não é responsável por criar ou gerenciar containers — apenas por garantir que o ambiente suporte Docker caso seja necessário.</p>
+        <details class="rpt-detail">
+          <summary>Ver instalação do Docker (Ubuntu 22.04)</summary>
+          <div class="rpt-detail-inner">
+            <div class="snippet">
+              <div class="snippet-label">bash · instalação oficial</div>
+              <pre># Instalação oficial para Ubuntu 22.04
+curl -fsSL https://get.docker.com | sh
+usermod -aG docker setter</pre>
+            </div>
+          </div>
+        </details>
+
+        <h4>3.5 WireGuard (VPN) <span class="cls cls-rec">Recomendado</span></h4>
+        <p>Ver <a class="rpt-xref" href="#sec-5">seção 5</a> completa sobre VPN. Se adotado, deve ser instalado pelo TI.</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · wireguard</div>
+          <pre>apt install -y wireguard</pre>
+        </div>
+
+        <h4>3.6 O que o TI não instala</h4>
+        <ul>
+          <li>Código da aplicação ou dependências Python específicas da aplicação</li>
+          <li>Banco de dados da aplicação</li>
+          <li>Containers Docker da aplicação</li>
+          <li>Chaves de API ou tokens de autenticação</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 4. SEGURANÇA ===== -->
+    <details class="rpt-section" id="sec-4">
+      <summary>
+        <span class="rpt-sec-num">04</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Hardening</span>
+          <span class="rpt-sec-title">Configuração de segurança</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>4.1 Usuário dedicado da aplicação <span class="cls cls-req">Obrigatório</span></h4>
+        <p>Criar usuário sem privilégios de root para isolar a aplicação do sistema:</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · usuário setter</div>
+          <pre>adduser setter
+usermod -aG sudo setter</pre>
+        </div>
+        <p>O TI deve registrar a chave pública SSH da Setter neste usuário. O acesso SSH do próprio TI deve usar um usuário administrativo separado (<code>ti-admin</code> ou equivalente) — as credenciais das duas partes nunca se misturam.</p>
+
+        <h4>4.2 Hardening de SSH</h4>
+        <p>Aplicar em <code>/etc/ssh/sshd_config</code>. Reiniciar o serviço após as alterações. <strong>Validar login por chave SSH em sessão paralela antes de desabilitar autenticação por senha.</strong></p>
+        <table class="comp-table">
+          <thead><tr><th>Diretiva</th><th>Valor</th><th>Classificação</th><th>Motivo</th></tr></thead>
+          <tbody>
+            <tr><td><code>PermitRootLogin</code></td><td><code>no</code></td><td><span class="cls cls-req">Obrigatório</span></td><td>Elimina o vetor de ataque mais explorado em servidores Linux</td></tr>
+            <tr><td><code>PasswordAuthentication</code></td><td><code>no</code></td><td><span class="cls cls-req">Obrigatório</span></td><td>Força uso exclusivo de chave SSH; elimina brute-force de senha</td></tr>
+            <tr><td><code>ChallengeResponseAuthentication</code></td><td><code>no</code></td><td><span class="cls cls-req">Obrigatório</span></td><td>Complementa o item acima</td></tr>
+            <tr><td><code>MaxAuthTries</code></td><td><code>3</code></td><td><span class="cls cls-rec">Recomendado</span></td><td>Limita tentativas por sessão SSH</td></tr>
+            <tr><td><code>ClientAliveInterval</code></td><td><code>300</code></td><td><span class="cls cls-rec">Recomendado</span></td><td>Desconecta sessões inativas após 5 min</td></tr>
+            <tr><td><code>ClientAliveCountMax</code></td><td><code>2</code></td><td><span class="cls cls-rec">Recomendado</span></td><td>Complementa o item acima</td></tr>
+            <tr><td><code>X11Forwarding</code></td><td><code>no</code></td><td><span class="cls cls-rec">Recomendado</span></td><td>Desabilita forwarding gráfico desnecessário em servidor</td></tr>
+          </tbody>
+        </table>
+
+        <h4>4.3 Firewall UFW <span class="cls cls-req">Obrigatório</span></h4>
+        <div class="snippet">
+          <div class="snippet-label">bash · regras ufw</div>
+          <pre>ufw default deny incoming
+ufw default allow outgoing
+ufw allow 22/tcp    # SSH
+ufw allow 80/tcp    # HTTP → redirect para HTTPS
+ufw allow 443/tcp   # HTTPS (tráfego da aplicação)
+ufw enable</pre>
+        </div>
+        <div class="rpt-note crit"><strong>Regra crítica:</strong> Nenhuma outra porta deve ser aberta. O processo da aplicação escuta exclusivamente em <code>127.0.0.1</code> (loopback) e não deve ser alcançável externamente de forma direta.</div>
+        <p>Se VPN for adotada (<a class="rpt-xref" href="#sec-5">seção 5</a>), substituir as regras 80/443 por:</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · ufw com vpn</div>
+          <pre>ufw allow 51820/udp  # WireGuard VPN
+# Portas 80 e 443 podem ser removidas do acesso externo</pre>
+        </div>
+
+        <h4>4.4 Fail2ban <span class="cls cls-req">Obrigatório</span></h4>
+        <p>Configurar em <code>/etc/fail2ban/jail.local</code>:</p>
+        <details class="rpt-detail">
+          <summary>Ver configuração jail.local + ativação</summary>
+          <div class="rpt-detail-inner">
+            <div class="snippet">
+              <div class="snippet-label">ini · /etc/fail2ban/jail.local</div>
+              <pre>[DEFAULT]
+bantime  = 3600
+findtime = 600
+maxretry = 5
+
+[sshd]
+enabled  = true
+port     = ssh
+logpath  = /var/log/auth.log
+maxretry = 3
+
+[nginx-http-auth]
+enabled = true
+
+[nginx-limit-req]
+enabled = true</pre>
+            </div>
+            <div class="snippet">
+              <div class="snippet-label">bash · ativar fail2ban</div>
+              <pre>systemctl enable fail2ban
+systemctl start fail2ban</pre>
+            </div>
+          </div>
+        </details>
+
+        <h4>4.5 Atualizações automáticas de segurança <span class="cls cls-req">Obrigatório</span></h4>
+        <div class="snippet">
+          <div class="snippet-label">bash · unattended-upgrades</div>
+          <pre>apt install unattended-upgrades -y
+dpkg-reconfigure --priority=low unattended-upgrades
+# Selecionar "Yes"</pre>
+        </div>
+        <p>Verificar que <code>/etc/apt/apt.conf.d/20auto-upgrades</code> contém:</p>
+        <div class="snippet">
+          <div class="snippet-label">conf · 20auto-upgrades</div>
+          <pre>APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";</pre>
+        </div>
+
+        <h4>4.6 Monitoramento de recursos <span class="cls cls-rec">Recomendado</span></h4>
+        <p>Configurar alertas automáticos para o contato da Setter quando:</p>
+        <ul>
+          <li>Uso de CPU &gt; 80% por mais de 5 minutos</li>
+          <li>Uso de RAM &gt; 85%</li>
+          <li>Uso de disco &gt; 70%</li>
+          <li>Serviço nginx fora do ar</li>
+        </ul>
+        <p>Ferramentas aceitas: qualquer sistema de monitoramento já utilizado pelo TI (Zabbix, Datadog, UptimeRobot, alerta simples por e-mail via cron). O importante é que o alerta chegue à Setter.</p>
+      </div>
+    </details>
+
+    <!-- ===== 5. VPN ===== -->
+    <details class="rpt-section" id="sec-5">
+      <summary>
+        <span class="rpt-sec-num">05</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Rede privada</span>
+          <span class="rpt-sec-title">VPN</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>5.1 Por que VPN importa — classificação geral <span class="cls cls-rec">Recomendado</span></h4>
+        <p>Sem VPN, o servidor fica acessível na internet pública via HTTPS — protegido por TLS e autenticação por token, mas exposto a varreduras, brute-force e DDoS. Com VPN, o servidor deixa de ser alcançável publicamente: somente dispositivos conectados ao túnel conseguem iniciar uma conexão.</p>
+        <p>Para o perfil da Setter — dispositivos corporativos — VPN representa ganho de segurança significativo com baixo custo operacional. Não é obrigatório para o deploy funcionar, mas é fortemente recomendado para ambiente de produção com dados sensíveis de M&amp;A.</p>
+
+        <h4>5.2 Topologia com VPN</h4>
+        <div class="snippet">
+          <div class="snippet-label">diagrama · topologia</div>
+          <pre>[Máquina do analista com cliente VPN]
+        │  Túnel WireGuard criptografado
+        ▼
+[VPS — WireGuard Server]  ← único ponto de entrada exposto
+        │
+        └─ Rede interna do túnel → nginx → aplicação</pre>
+        </div>
+        <p>Com esta topologia, 80/443 saem do UFW externo. Apenas a porta UDP 51820 fica exposta.</p>
+
+        <h4>5.3 WireGuard <span class="cls cls-rec">Recomendado</span> · solução preferencial</h4>
+        <p>Nativo no kernel Linux desde 5.6 (Ubuntu 22.04 já inclui). Latência mínima, configuração auditável, sem dependência de terceiros.</p>
+        <details class="rpt-detail">
+          <summary>Ver geração de chaves e arquivo wg0.conf</summary>
+          <div class="rpt-detail-inner">
+            <div class="snippet">
+              <div class="snippet-label">bash · chaves do servidor</div>
+              <pre>apt install -y wireguard
+
+# Gera par de chaves do servidor
+wg genkey | tee /etc/wireguard/server_private.key | wg pubkey > /etc/wireguard/server_public.key
+chmod 600 /etc/wireguard/server_private.key</pre>
+            </div>
+            <div class="snippet">
+              <div class="snippet-label">ini · /etc/wireguard/wg0.conf</div>
+              <pre>[Interface]
+Address    = 10.10.0.1/24
+PrivateKey = &lt;SERVER_PRIVATE_KEY&gt;
+ListenPort = 51820
+
+# Repetir bloco [Peer] para cada dispositivo autorizado
+[Peer]
+PublicKey  = &lt;CHAVE_PÚBLICA_DO_PEER&gt;
+AllowedIPs = 10.10.0.2/32</pre>
+            </div>
+            <div class="snippet">
+              <div class="snippet-label">bash · ativar wg0</div>
+              <pre>systemctl enable wg-quick@wg0
+systemctl start wg-quick@wg0</pre>
+            </div>
+          </div>
+        </details>
+
+        <h4>5.4 Tailscale <span class="cls cls-opt">Opcional</span> · alternativa gerenciada</h4>
+        <p>Baseado em WireGuard, elimina configuração manual de peers. Mais simples operacionalmente, mas cria dependência de serviço de terceiros para coordenação de acesso.</p>
+        <div class="snippet">
+          <div class="snippet-label">bash · tailscale</div>
+          <pre>curl -fsSL https://tailscale.com/install.sh | sh
+tailscale up</pre>
+        </div>
+        <p>Usar apenas se o TI não tiver capacidade operacional para gerenciar WireGuard manualmente, e mediante aprovação da gestão da Setter quanto à dependência de terceiros.</p>
+
+        <h4>5.5 Decisão a tomar na reunião</h4>
+        <ul>
+          <li>VPN será adotada? (RECOMENDADO, não obrigatório)</li>
+          <li>Se sim: WireGuard autogerenciado ou Tailscale?</li>
+          <li>Os dispositivos dos analistas são corporativos e controlados? (pré-requisito para VPN funcionar)</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 6. MANUTENÇÃO ===== -->
+    <details class="rpt-section" id="sec-6">
+      <summary>
+        <span class="rpt-sec-num">06</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Operação contínua</span>
+          <span class="rpt-sec-title">Manutenção contínua — escopo do TI</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>6.1 Processos automáticos <span class="cls cls-req">Obrigatório</span> · configurar uma vez</h4>
+        <table class="comp-table">
+          <thead><tr><th>Processo</th><th>Mecanismo</th><th>Resultado esperado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Patches de segurança do OS</strong></td><td><code>unattended-upgrades</code></td><td>Aplicação automática diária</td></tr>
+            <tr><td><strong>Renovação de certificado TLS</strong></td><td>Certbot via cron</td><td>Renovação automática a cada 60–90 dias</td></tr>
+            <tr><td><strong>Banimento de IPs suspeitos</strong></td><td>Fail2ban</td><td>Proteção contínua sem intervenção</td></tr>
+          </tbody>
+        </table>
+
+        <h4>6.2 Revisão periódica <span class="cls cls-req">Obrigatório</span> · rotina mensal</h4>
+        <table class="comp-table">
+          <thead><tr><th>Tarefa</th><th>Frequência</th></tr></thead>
+          <tbody>
+            <tr><td>Revisão de <code>/var/log/auth.log</code> — tentativas de acesso suspeitas</td><td>Mensal</td></tr>
+            <tr><td>Verificação de IPs banidos pelo fail2ban</td><td>Mensal</td></tr>
+            <tr><td>Verificação de espaço em disco — alertar Setter se &gt; 70%</td><td>Mensal</td></tr>
+            <tr><td>Verificação de pacotes fora do escopo do <code>unattended-upgrades</code></td><td>Mensal</td></tr>
+          </tbody>
+        </table>
+
+        <h4>6.3 Snapshots da VPS <span class="cls cls-rec">Recomendado</span></h4>
+        <p>Configurar snapshot automático semanal via painel do provedor cloud. Retenção mínima sugerida: 4 snapshots (1 mês). O TI é responsável por garantir que snapshots estejam ocorrendo — a Setter gerencia backup da camada de aplicação separadamente.</p>
+
+        <h4>6.4 Reboots de kernel <span class="cls cls-req">Obrigatório</span> · procedimento</h4>
+        <p>Quando um patch de kernel exigir reboot:</p>
+        <ol>
+          <li>Notificar a Setter com mínimo 24h de antecedência</li>
+          <li>Aguardar confirmação da janela de manutenção</li>
+          <li>Executar o reboot</li>
+          <li>Confirmar que o servidor responde: <code>curl https://[subdomínio]/health</code></li>
+        </ol>
+        <p>A aplicação reinicia automaticamente via systemd — o TI não intervém na aplicação.</p>
+
+        <h4>6.5 Fora do escopo do TI</h4>
+        <p>O TI <strong>não é responsável</strong> por:</p>
+        <ul>
+          <li>Restart ou debug da aplicação (Python / Uvicorn / Docker)</li>
+          <li>Alterações no banco de dados</li>
+          <li>Configuração ou rotação de API keys</li>
+          <li>Alterações no código ou dependências da aplicação</li>
+          <li>Configuração do <code>server block</code> do nginx</li>
+        </ul>
+        <p>Qualquer incidente na camada de aplicação deve ser reportado à Setter para resolução interna.</p>
+      </div>
+    </details>
+
+    <!-- ===== 7. CREDENCIAIS ===== -->
+    <details class="rpt-section" id="sec-7">
+      <summary>
+        <span class="rpt-sec-num">07</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Segregação de acesso</span>
+          <span class="rpt-sec-title">Compartilhamento de credenciais e chaves</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>7.1 Chaves SSH <span class="cls cls-req">Obrigatório</span></h4>
+        <ul>
+          <li>A Setter fornece uma chave pública SSH para o usuário <code>setter</code> — acesso exclusivo da equipe interna</li>
+          <li>O TI mantém chave SSH própria em usuário administrativo separado (<code>ti-admin</code> ou equivalente)</li>
+          <li>Nenhuma senha de sistema é compartilhada entre as partes</li>
+          <li>Troca de chaves por canal seguro — <span class="cls cls-req">Obrigatório</span> (não por e-mail em texto plano)</li>
+        </ul>
+
+        <h4>7.2 API Keys da aplicação <span class="cls cls-req">Obrigatório</span> · restrição</h4>
+        <p>As API keys são geradas e gerenciadas exclusivamente pela Setter. O TI <strong>não terá acesso</strong> a essas chaves e <strong>não deve solicitá-las</strong>. Estão armazenadas em arquivo com permissão 600, acessível apenas ao usuário <code>setter</code>.</p>
+
+        <h4>7.3 Credenciais do console do provedor (out-of-band) <span class="cls cls-req">Obrigatório</span></h4>
+        <p>O acesso ao console de recuperação do provedor deve ser documentado e disponibilizado à Setter para uso em emergências onde SSH esteja inacessível. Definir na reunião o canal seguro para este compartilhamento — cofre de senhas corporativo (1Password, Bitwarden ou equivalente) é o método aceito.</p>
+
+        <h4>7.4 Chaves WireGuard (se VPN adotada) <span class="cls cls-req">Obrigatório (se VPN)</span></h4>
+        <ul>
+          <li>A chave pública do servidor WireGuard deve ser entregue à Setter para configuração dos peers</li>
+          <li>O TI armazena a chave privada do servidor com permissão 600</li>
+          <li>A Setter fornece as chaves públicas de cada dispositivo que precisa de acesso VPN</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 8. CHECKLIST ===== -->
+    <details class="rpt-section" id="sec-8">
+      <summary>
+        <span class="rpt-sec-num">08</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Aceite</span>
+          <span class="rpt-sec-title">Checklist de entrega</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>O TI deve validar e confirmar cada item abaixo antes de declarar a VPS pronta. A Setter <strong>não inicia o deploy</strong> sem este checklist completo.</p>
+
+        <h4>Itens obrigatórios <span class="cls cls-req">Obrigatório</span></h4>
+        <ul class="rpt-checklist">
+          <li>VPS criada com Ubuntu 22.04 LTS e IP estático alocado</li>
+          <li>Usuário <code>setter</code> criado com chave SSH da Setter registrada</li>
+          <li>Login root desabilitado (<code>PermitRootLogin no</code>)</li>
+          <li>Autenticação por senha desabilitada (<code>PasswordAuthentication no</code>)</li>
+          <li>UFW ativo — somente portas 22, 80, 443 abertas (<code>sudo ufw status verbose</code>)</li>
+          <li>Fail2ban ativo (<code>sudo fail2ban-client status</code>)</li>
+          <li><code>unattended-upgrades</code> configurado e ativo</li>
+          <li>nginx instalado e ativo (sem server block — não configurar virtual host)</li>
+          <li>Certbot instalado (<code>certbot --version</code>)</li>
+          <li>IP estático e credenciais SSH entregues à Setter por canal seguro</li>
+          <li>Acesso out-of-band documentado e procedimento de compartilhamento acordado</li>
+        </ul>
+
+        <h4>Itens recomendados <span class="cls cls-rec">Recomendado</span></h4>
+        <ul class="rpt-checklist">
+          <li>Monitoramento de disco/CPU/RAM com alerta automático para a Setter</li>
+          <li>Snapshot automático semanal configurado no painel do provedor</li>
+          <li>Diretivas SSH adicionais aplicadas (<code>MaxAuthTries</code>, <code>ClientAliveInterval</code>, <code>X11Forwarding</code>)</li>
+        </ul>
+
+        <h4>Itens opcionais (se acordado) <span class="cls cls-opt">Opcional</span></h4>
+        <ul class="rpt-checklist">
+          <li>Docker instalado e usuário <code>setter</code> no grupo <code>docker</code></li>
+          <li>WireGuard instalado, serviço <code>wg-quick@wg0</code> ativo, porta 51820/UDP aberta</li>
+          <li>Peer de teste VPN configurado e validado com a Setter</li>
+          <li>Procedimento de adição de novos peers VPN documentado</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 9. CONTATO ===== -->
+    <details class="rpt-section" id="sec-9">
+      <summary>
+        <span class="rpt-sec-num">09</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Suporte</span>
+          <span class="rpt-sec-title">Contato e escalação</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <table class="comp-table">
+          <thead><tr><th>Situação</th><th>Ação esperada do TI</th></tr></thead>
+          <tbody>
+            <tr><td><strong>VPS inacessível via SSH</strong></td><td>Acionar console out-of-band e notificar Setter imediatamente</td></tr>
+            <tr><td><strong>Alerta de disco &gt; 70%</strong></td><td>Notificar Setter para providências na camada de aplicação</td></tr>
+            <tr><td><strong>Certificado TLS expirado</strong></td><td><code>sudo certbot renew</code> e confirmar resultado para a Setter</td></tr>
+            <tr><td><strong>Tentativas de acesso suspeitas</strong></td><td>Revisar fail2ban, reforçar UFW se necessário, notificar Setter</td></tr>
+            <tr><td><strong>Patch de kernel disponível</strong></td><td>Notificar Setter, agendar reboot em janela acordada</td></tr>
+            <tr><td><strong>Qualquer dúvida sobre a aplicação</strong></td><td>Reportar à Setter — não intervir na aplicação sem autorização</td></tr>
+          </tbody>
+        </table>
+        <div class="rpt-note">
+          <strong>Contato Setter — IA &amp; Dados:</strong><br />
+          Thiago Bagdonas | <a href="mailto:thiago.bagdonas@setter.net.br">thiago.bagdonas@setter.net.br</a>
+        </div>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-left">
+    <strong>Relatório 01 · Briefing Técnico — VPS</strong><br />
+    Setter · IA &amp; Dados · 24/06/2026<br />
+    <a href="vps-mcp.html">← Central VPS/MCP</a> &nbsp;·&nbsp; <a href="index.html">Início</a> &nbsp;·&nbsp; <a href="relatorio-executivo-mcp.html">Relatório Executivo MCP →</a>
+  </div>
+  <div class="footer-right">
+    Documento preparado por Setter — IA &amp; Dados. Uso restrito: equipe de TI contratada e gestão da Setter.
+  </div>
+</footer>
+
+<button class="to-top" aria-label="Voltar ao topo" title="Voltar ao topo">↑</button>
+
+<script src="reports.js"></script>
+</body>
+</html>

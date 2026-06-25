@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relatório Executivo — Infraestrutura MCP Server | Setter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ HEADER / NAV ============ -->
+<header class="topbar">
+  <a class="brand" href="index.html" style="text-decoration:none;">
+    <div class="logo-mark" aria-label="Anthropic">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+        <path d="M13.827 3.52h3.603L24 20h-3.603l-1.397-3.546h-5.892L11.711 20H8.108L13.827 3.52zM18.176 13.46l-2.078-5.298-2.078 5.298h4.156zM0 20l5.719-16.48h3.522L3.522 20H0z"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="brand-title">Anthropic Stack</div>
+      <div class="brand-sub">Briefing Executivo · Setter</div>
+    </div>
+  </a>
+  <nav class="topnav">
+    <a href="index.html">Início</a>
+    <a href="vps-mcp.html" class="nav-vps">Central VPS/MCP ↗</a>
+    <a href="relatorio-briefing-ti.html">← Briefing Técnico TI</a>
+  </nav>
+</header>
+
+<!-- ============ BARRA DE AÇÕES FIXA ============ -->
+<div class="rpt-actionbar">
+  <div class="ab-left">
+    <a href="vps-mcp.html">← Central VPS/MCP</a>
+    <span>Relatório 02 · Relatório Executivo MCP</span>
+  </div>
+  <div class="rpt-actions">
+    <button class="rpt-btn" data-action="expand-all">Expandir tudo</button>
+    <button class="rpt-btn" data-action="collapse-all">Recolher tudo</button>
+    <button class="rpt-btn rpt-btn-pdf" data-action="print">⬇ Salvar PDF</button>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <nav class="breadcrumb" aria-label="Trilha de navegação">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <a href="vps-mcp.html">VPS / MCP</a>
+      <span class="sep">/</span>
+      <span class="current">Relatório Executivo — MCP Server</span>
+    </nav>
+    <div class="hero-tag">Relatório 02 · Uso interno</div>
+    <h1>Infraestrutura MCP Server.</h1>
+    <p class="hero-lead">
+      Material da <strong>reunião técnica com a equipe de TI</strong>. Alinha a divisão de responsabilidades entre TI e IA/Dados para o provisionamento, segurança e manutenção contínua da VPS que hospedará o <em>servidor MCP</em> da Setter.
+    </p>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <div class="hc-label">Objetivo</div>
+        <div class="hc-text">Alinhar a <strong>divisão de responsabilidades</strong> entre TI e IA/Dados para provisionamento, segurança e manutenção da infraestrutura de VPS.</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Resultado esperado</div>
+        <div class="hc-text">TI entrega uma VPS <strong>hardened</strong> e assume a segurança da infra. IA/Dados assume o deploy e a manutenção da aplicação, com <strong>posse exclusiva das chaves</strong>.</div>
+      </div>
+      <div class="hero-card warn">
+        <div class="hc-label">Fronteira crítica</div>
+        <div class="hc-text">TI nunca acessa <strong>.env</strong>, banco SQLite ou audit logs. IA/Dados nunca assume <strong>kernel, firewall, TLS</strong> ou console do provedor.</div>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Responsável: Thiago Bagdonas — IA &amp; Dados, Setter · 24/06/2026 · Classificação: Uso interno</span>
+      <a href="#doc" class="hero-cta">Ir ao documento ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCUMENTO ============ -->
+<section id="doc" class="section">
+
+  <!-- Índice -->
+  <nav class="rpt-toc" aria-label="Índice do relatório">
+    <span class="rpt-toc-label">Índice — clique para abrir a seção</span>
+    <button class="rpt-chip" data-target="sec-1"><span class="chip-num">01</span>Contexto e objetivo</button>
+    <button class="rpt-chip" data-target="sec-2"><span class="chip-num">02</span>O que é o MCP Server</button>
+    <button class="rpt-chip" data-target="sec-3"><span class="chip-num">03</span>Divisão de responsabilidades</button>
+    <button class="rpt-chip" data-target="sec-4"><span class="chip-num">04</span>Especificações técnicas</button>
+    <button class="rpt-chip" data-target="sec-5"><span class="chip-num">05</span>Modelo de segurança</button>
+    <button class="rpt-chip" data-target="sec-6"><span class="chip-num">06</span>Checklist de entrega</button>
+    <button class="rpt-chip" data-target="sec-7"><span class="chip-num">07</span>Manutenção contínua</button>
+    <button class="rpt-chip" data-target="sec-8"><span class="chip-num">08</span>Comunicação e escalação</button>
+    <button class="rpt-chip" data-target="sec-9"><span class="chip-num">09</span>Perguntas para a reunião</button>
+    <button class="rpt-chip" data-target="sec-10"><span class="chip-num">10</span>Cronograma proposto</button>
+  </nav>
+
+  <div class="rpt-doc">
+
+    <!-- ===== 1. CONTEXTO E OBJETIVO ===== -->
+    <details class="rpt-section" id="sec-1" open>
+      <summary>
+        <span class="rpt-sec-num">01</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Enquadramento</span>
+          <span class="rpt-sec-title">Contexto e objetivo</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>A Setter está implementando um servidor MCP (Model Context Protocol) próprio como parte da adoção estratégica da plataforma Claude (Anthropic) para operações de M&amp;A. O MCP é o protocolo padrão que permite ao Claude acessar dados internos, executar automações e consultar bancos de dados em tempo real durante as análises dos analistas.</p>
+        <div class="rpt-note"><strong>Objetivo desta reunião:</strong> Alinhar a divisão de responsabilidades entre TI e a área de IA/Dados para o provisionamento, segurança e manutenção contínua da infraestrutura de VPS que hospedará o servidor.</div>
+        <div class="rpt-note"><strong>Resultado esperado:</strong> TI entrega uma VPS hardened e assume a manutenção de segurança da infraestrutura. A área de IA/Dados assume o deploy e manutenção da aplicação, com posse exclusiva das chaves de API.</div>
+      </div>
+    </details>
+
+    <!-- ===== 2. O QUE É O MCP SERVER ===== -->
+    <details class="rpt-section" id="sec-2">
+      <summary>
+        <span class="rpt-sec-num">02</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Contexto técnico</span>
+          <span class="rpt-sec-title">O que é o MCP Server</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>O MCP Server é um processo Python (FastMCP + Uvicorn) que roda na VPS e expõe endpoints HTTP autenticados. Os clientes são os aplicativos Claude (Claude Desktop, Claude Code, Claude Cowork) instalados nas máquinas dos usuários da Setter.</p>
+        <div class="snippet">
+          <div class="snippet-label">diagrama · arquitetura</div>
+          <pre>[Claude — máquinas dos analistas]
+        │
+        │  HTTPS + Bearer Token
+        ▼
+[nginx — reverse proxy + TLS termination]
+        │
+        │  HTTP interno (127.0.0.1:8000)
+        ▼
+[Uvicorn → FastMCP Application]
+        │
+        ├── SQLite (banco interno de deals)
+        ├── Scripts Python/Shell (automações ETL)
+        └── Audit log (append-only, imutável)</pre>
+        </div>
+
+        <h4>O que o servidor expõe</h4>
+        <ul>
+          <li><strong>Tools:</strong> funções que o Claude pode invocar — inserir deals, disparar ETL, gerar relatórios</li>
+          <li><strong>Resources:</strong> consultas read-only ao banco — pipeline de deals, valuations, research setorial</li>
+          <li><strong>Health endpoint:</strong> <code>GET /health</code> — sem autenticação, para monitoramento</li>
+        </ul>
+
+        <h4>O que o servidor NÃO faz</h4>
+        <ul>
+          <li>Não acessa a internet (apenas recebe conexões de entrada)</li>
+          <li>Não armazena dados em memória entre sessões (stateless por request)</li>
+          <li>Não executa código arbitrário (allowlist explícita de scripts autorizados)</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 3. DIVISÃO DE RESPONSABILIDADES ===== -->
+    <details class="rpt-section" id="sec-3">
+      <summary>
+        <span class="rpt-sec-num">03</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Governança</span>
+          <span class="rpt-sec-title">Divisão de responsabilidades</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>Esta é a separação proposta entre TI e IA/Dados:</p>
+
+        <h4>3.1 Responsabilidade do TI — infraestrutura e segurança</h4>
+        <table class="comp-table">
+          <thead><tr><th>Domínio</th><th>Tarefa</th><th>Periodicidade</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Provisionamento</strong></td><td>Criação da VPS com Ubuntu 22.04 LTS</td><td>Uma vez</td></tr>
+            <tr><td><strong>Acesso inicial</strong></td><td>Criação do usuário <code>setter</code> com sudo, chave SSH</td><td>Uma vez</td></tr>
+            <tr><td><strong>SSH hardening</strong></td><td>Desabilitar root login, desabilitar password auth</td><td>Uma vez</td></tr>
+            <tr><td><strong>Firewall (UFW)</strong></td><td>Liberar 22/80/443, bloquear todo o resto</td><td>Uma vez</td></tr>
+            <tr><td><strong>Fail2ban</strong></td><td>Configurar banimento por tentativas SSH e nginx</td><td>Uma vez</td></tr>
+            <tr><td><strong>Certbot / TLS</strong></td><td>Emitir e renovar certificado Let's Encrypt para <code>mcp.setter.net.br</code></td><td>Automático (renovação 90 dias)</td></tr>
+            <tr><td><strong>OS updates</strong></td><td><code>unattended-upgrades</code> para patches de segurança</td><td>Automático (diário)</td></tr>
+            <tr><td><strong>Monitoramento</strong></td><td>Alertas de CPU/memória/disco acima de 80%</td><td>Contínuo</td></tr>
+            <tr><td><strong>Acesso de emergência</strong></td><td>Console de recuperação via provedor (acesso out-of-band)</td><td>Sob demanda</td></tr>
+            <tr><td><strong>Auditoria de acesso</strong></td><td>Revisão mensal de <code>/var/log/auth.log</code> e eventos fail2ban</td><td>Mensal</td></tr>
+          </tbody>
+        </table>
+
+        <h4>3.2 Responsabilidade da área de IA/Dados — aplicação</h4>
+        <table class="comp-table">
+          <thead><tr><th>Domínio</th><th>Tarefa</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Deploy</strong></td><td>Código da aplicação, virtualenv, dependências Python</td></tr>
+            <tr><td><strong>Configuração da aplicação</strong></td><td>Arquivo <code>.env</code> com as API keys (posse exclusiva)</td></tr>
+            <tr><td><strong>Banco de dados</strong></td><td>Schema SQLite, backups diários, rotação de dados</td></tr>
+            <tr><td><strong>systemd service</strong></td><td>Arquivo de serviço, start/stop/restart da aplicação</td></tr>
+            <tr><td><strong>nginx</strong></td><td>Configuração do <code>server block</code> para o MCP</td></tr>
+            <tr><td><strong>Manutenção do código</strong></td><td>Updates de versão do FastMCP, novas tools, novos scripts</td></tr>
+            <tr><td><strong>API keys</strong></td><td>Geração, rotação e distribuição das chaves de autenticação</td></tr>
+            <tr><td><strong>Audit log</strong></td><td>Monitoramento e análise de eventos de auditoria da aplicação</td></tr>
+          </tbody>
+        </table>
+
+        <h4>3.3 Fronteira crítica — o que cada parte NUNCA toca</h4>
+        <div class="split-grid">
+          <div class="split-card split-a">
+            <h5>TI não acessa</h5>
+            <ul>
+              <li>O arquivo <code>config/.env</code> (contém as API keys)</li>
+              <li>O conteúdo do banco SQLite (<code>data/setter.db</code>)</li>
+              <li>Os audit logs da aplicação (<code>logs/audit.log</code>)</li>
+            </ul>
+          </div>
+          <div class="split-card split-b">
+            <h5>IA/Dados não assume</h5>
+            <ul>
+              <li>Manutenção do kernel e pacotes do OS</li>
+              <li>Regras de firewall e fail2ban</li>
+              <li>Renovação de certificados TLS</li>
+              <li>Acesso de emergência via console do provedor</li>
+            </ul>
+          </div>
+        </div>
+        <p>Esta separação respeita o princípio de menor privilégio e garante que nenhuma das partes precisa da outra para executar suas funções rotineiras.</p>
+      </div>
+    </details>
+
+    <!-- ===== 4. ESPECIFICAÇÕES TÉCNICAS ===== -->
+    <details class="rpt-section" id="sec-4">
+      <summary>
+        <span class="rpt-sec-num">04</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Dimensionamento</span>
+          <span class="rpt-sec-title">Especificações técnicas da VPS</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>4.1 Requisitos mínimos</h4>
+        <table class="comp-table">
+          <thead><tr><th>Recurso</th><th>Mínimo</th><th>Recomendado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>vCPU</strong></td><td>1</td><td>2</td></tr>
+            <tr><td><strong>RAM</strong></td><td>2 GB</td><td>4 GB</td></tr>
+            <tr><td><strong>Disco SSD</strong></td><td>20 GB</td><td>40 GB</td></tr>
+            <tr><td><strong>Rede</strong></td><td>100 Mbps</td><td>200 Mbps</td></tr>
+            <tr><td><strong>OS</strong></td><td>Ubuntu 22.04 LTS</td><td>Ubuntu 22.04 LTS</td></tr>
+            <tr><td><strong>IP</strong></td><td>1 IPv4 estático</td><td>1 IPv4 estático</td></tr>
+          </tbody>
+        </table>
+        <div class="rpt-note"><strong>Estimativa de custo:</strong> R$ 80–150/mês (Hetzner CX21 ou DigitalOcean equivalente). Custo aumenta apenas se SQLite ultrapassar ~50 GB — improvável no horizonte de 12 meses.</div>
+
+        <h4>4.2 Provedor recomendado</h4>
+        <ul>
+          <li><strong>Hetzner Cloud</strong> (Helsinki ou Ashburn): melhor custo-benefício, ~€4/mês para CX21</li>
+          <li><strong>DigitalOcean</strong> (São Paulo): latência menor para o Brasil, ~$24/mês para Droplet equivalente</li>
+        </ul>
+        <p>Ambos fornecem console out-of-band, snapshots automatizados e IPv4 estático incluso.</p>
+
+        <h4>4.3 Configuração de rede necessária</h4>
+        <ul>
+          <li><strong>DNS:</strong> Registro A apontando <code>mcp.setter.net.br</code> → IP da VPS (TI ou responsável pelo DNS da Setter)</li>
+          <li><strong>Portas abertas no firewall externo:</strong> 22 (SSH), 80 (HTTP→redirect), 443 (HTTPS)</li>
+          <li><strong>Nenhuma outra porta deve ser exposta</strong> — o processo Python escuta exclusivamente em <code>127.0.0.1:8000</code></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 5. MODELO DE SEGURANÇA ===== -->
+    <details class="rpt-section" id="sec-5">
+      <summary>
+        <span class="rpt-sec-num">05</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Defesa em profundidade</span>
+          <span class="rpt-sec-title">Modelo de segurança</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>5.1 Camadas de defesa</h4>
+        <div class="snippet">
+          <div class="snippet-label">diagrama · camadas</div>
+          <pre>Internet
+   │
+   ├─ [UFW] Bloqueia tudo exceto 22/80/443
+   │
+   ├─ [Fail2ban] Bane IPs após 3 falhas SSH / 5 falhas HTTP em 10 min
+   │
+   ├─ [nginx] TLS 1.2+, HSTS, rate limiting (10 req/s), sem buffering
+   │
+   ├─ [FastMCP + StaticTokenVerifier] Bearer token obrigatório por tier
+   │       ├─ Tier read  → analistas (consultas)
+   │       ├─ Tier write → automações internas
+   │       └─ Tier admin → responsável IA/Dados
+   │
+   ├─ [SQLite WAL + queries parametrizadas] Zero SQL injection possível
+   │
+   └─ [Audit log append-only] chattr +a — nem root deleta</pre>
+        </div>
+
+        <h4>5.2 Autenticação — o que TI precisa saber</h4>
+        <p>O servidor usa Bearer tokens (API keys) gerados e gerenciados exclusivamente pela área de IA/Dados. O TI <strong>não precisa e não deve</strong> conhecer os valores dessas chaves. A autenticação é tratada na camada de aplicação (FastMCP), não no nginx.</p>
+        <p>O nginx valida apenas TLS e aplica rate limiting. Não faz autenticação de conteúdo.</p>
+
+        <h4>5.3 Vetor de ataque mapeado — prompt injection via MCP</h4>
+        <p>O principal risco específico desta aplicação é <strong>prompt injection</strong>: um documento malicioso aberto por um analista poderia, em tese, tentar instruir o Claude a executar queries não autorizadas via MCP. As defesas implementadas:</p>
+        <ul>
+          <li>Queries SQL sempre parametrizadas (sem interpolação de string)</li>
+          <li>Allowlist explícita de scripts que podem ser invocados</li>
+          <li>Parâmetros passados via stdin JSON, nunca como args de shell</li>
+          <li>Audit log de toda operação, incluindo parâmetros recebidos</li>
+          <li>Tools de escrita requerem campo <code>justificativa</code> obrigatório</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 6. CHECKLIST ===== -->
+    <details class="rpt-section" id="sec-6">
+      <summary>
+        <span class="rpt-sec-num">06</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Aceite</span>
+          <span class="rpt-sec-title">Checklist de entrega — TI para IA/Dados</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>Ao final do provisionamento, o TI deve entregar à área de IA/Dados:</p>
+        <ul class="rpt-checklist">
+          <li>IP público da VPS e acesso SSH com usuário <code>setter</code> + chave pública registrada</li>
+          <li>Confirmação de que <code>root</code> login está desabilitado via SSH</li>
+          <li>Confirmação de que autenticação por senha está desabilitada</li>
+          <li>UFW ativo com regras 22/80/443 — status via <code>sudo ufw status verbose</code></li>
+          <li>Fail2ban ativo — status via <code>sudo fail2ban-client status</code></li>
+          <li><code>unattended-upgrades</code> configurado e ativo</li>
+          <li>Registro DNS <code>mcp.setter.net.br → IP</code> propagado (verificar via <code>dig mcp.setter.net.br +short</code>)</li>
+          <li>Certbot instalado (<code>python3-certbot-nginx</code>)</li>
+          <li>nginx instalado e rodando (sem <code>server block</code> configurado — isso é responsabilidade da IA/Dados)</li>
+          <li>Monitoramento de CPU/RAM/disco configurado com alerta para <code>thiago.bagdonas@setter.net.br</code></li>
+          <li>Acesso out-of-band (console do provedor) documentado e compartilhado com IA/Dados em canal seguro</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ===== 7. MANUTENÇÃO ===== -->
+    <details class="rpt-section" id="sec-7">
+      <summary>
+        <span class="rpt-sec-num">07</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Operação contínua</span>
+          <span class="rpt-sec-title">Manutenção contínua — o que o TI mantém</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <h4>Rotina automática (sem intervenção manual esperada)</h4>
+        <ul>
+          <li><strong>Patches de segurança:</strong> <code>unattended-upgrades</code> aplica automaticamente patches do kernel e pacotes críticos</li>
+          <li><strong>Renovação TLS:</strong> Certbot renova o certificado a cada 60–90 dias via <code>cron</code> — falha gera alerta</li>
+          <li><strong>Fail2ban:</strong> opera de forma autônoma, bane e desbane IPs conforme regras configuradas</li>
+        </ul>
+
+        <h4>Rotina mensal (intervenção ativa do TI)</h4>
+        <ul>
+          <li>Revisão de <code>/var/log/auth.log</code> — identificar tentativas de acesso suspeitas</li>
+          <li><code>sudo fail2ban-client status</code> — revisar IPs banidos recorrentes</li>
+          <li><code>df -h</code> — verificar crescimento de disco (alertar IA/Dados se &gt; 70%)</li>
+          <li><code>sudo apt list --upgradable</code> — verificar se há pacotes pendentes fora do escopo do <code>unattended-upgrades</code></li>
+        </ul>
+
+        <h4>Atualizações de kernel com reboot</h4>
+        <p>Quando o kernel for atualizado (raro, mas necessário), o processo é:</p>
+        <ol>
+          <li>TI notifica IA/Dados com 24h de antecedência</li>
+          <li>IA/Dados confirma janela de manutenção (evitar horário comercial)</li>
+          <li>TI executa <code>sudo reboot</code></li>
+          <li>systemd reinicia automaticamente o serviço MCP após o boot</li>
+          <li>IA/Dados confirma que <code>GET https://mcp.setter.net.br/health</code> retorna <code>{"status":"ok"}</code></li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- ===== 8. COMUNICAÇÃO E ESCALAÇÃO ===== -->
+    <details class="rpt-section" id="sec-8">
+      <summary>
+        <span class="rpt-sec-num">08</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Resposta a incidentes</span>
+          <span class="rpt-sec-title">Modelo de comunicação e escalação</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <table class="comp-table">
+          <thead><tr><th>Situação</th><th>Responsável primário</th><th>Ação</th></tr></thead>
+          <tbody>
+            <tr><td>VPS inacessível via SSH</td><td><strong>TI</strong></td><td>Acesso via console out-of-band, investigar SO</td></tr>
+            <tr><td>Serviço MCP fora do ar (nginx OK, SSH OK)</td><td><strong>IA/Dados</strong></td><td><code>sudo systemctl restart setter-mcp</code></td></tr>
+            <tr><td>Certificado TLS expirado</td><td><strong>TI</strong></td><td><code>sudo certbot renew</code></td></tr>
+            <tr><td>Tentativas de acesso suspeitas (auth log)</td><td><strong>TI</strong></td><td>Revisar fail2ban, reforçar regras UFW se necessário</td></tr>
+            <tr><td>Disco acima de 80%</td><td><strong>TI alerta → IA/Dados resolve</strong></td><td>IA/Dados limpa backups antigos ou expande banco</td></tr>
+            <tr><td>Rotação de API keys</td><td><strong>IA/Dados</strong></td><td>Atualiza <code>.env</code>, reinicia serviço — TI não é envolvido</td></tr>
+            <tr><td>Vulnerabilidade crítica (CVE) no OS</td><td><strong>TI</strong></td><td>Patch e reboot em janela de manutenção acordada</td></tr>
+            <tr><td>Nova automação ou tool no servidor</td><td><strong>IA/Dados</strong></td><td>Deploy via git pull, restart do serviço — TI não é envolvido</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <!-- ===== 9. PERGUNTAS ===== -->
+    <details class="rpt-section" id="sec-9">
+      <summary>
+        <span class="rpt-sec-num">09</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Agenda</span>
+          <span class="rpt-sec-title">Perguntas para a reunião</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <p>Itens a definir durante a conversa com o TI:</p>
+        <ol>
+          <li><strong>Provedor:</strong> Hetzner ou DigitalOcean? Há preferência ou contrato existente?</li>
+          <li><strong>DNS:</strong> Quem administra o domínio <code>setter.net.br</code>? TI ou terceiro?</li>
+          <li><strong>Monitoramento:</strong> O TI já tem ferramenta de monitoramento (Zabbix, Grafana, Datadog)? Integrar ou usar alerta básico por email?</li>
+          <li><strong>Janela de manutenção padrão:</strong> Qual horário é aceitável para reboots de kernel?</li>
+          <li><strong>Acesso de emergência:</strong> Como documentar e compartilhar credenciais do console do provedor de forma segura?</li>
+          <li><strong>Backup offsite:</strong> O TI assume backup dos snapshots da VPS, ou IA/Dados cuida disso separadamente do backup do banco?</li>
+          <li><strong>Prazo:</strong> Quando o TI consegue entregar a VPS hardened e pronta para deploy?</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- ===== 10. CRONOGRAMA ===== -->
+    <details class="rpt-section" id="sec-10">
+      <summary>
+        <span class="rpt-sec-num">10</span>
+        <span class="rpt-sec-head">
+          <span class="rpt-sec-eyebrow">Planejamento</span>
+          <span class="rpt-sec-title">Cronograma proposto</span>
+        </span>
+        <span class="rpt-sec-toggle">+</span>
+      </summary>
+      <div class="rpt-sec-body">
+        <div class="snippet">
+          <div class="snippet-label">cronograma · 3 semanas</div>
+          <pre>Semana 1
+  TI:       Provisionar VPS, hardening SSH, UFW, Fail2ban, unattended-upgrades
+  TI:       Configurar DNS mcp.setter.net.br
+  TI:       Instalar nginx e Certbot (sem server block)
+  TI:       Entrega do checklist (seção 6) para IA/Dados
+
+Semana 2
+  IA/Dados: Deploy da aplicação, nginx server block, TLS, systemd service
+  IA/Dados: Testes com MCP Inspector
+  IA/Dados: Integração com Claude Code (admin)
+
+Semana 3
+  IA/Dados: Integração com Claude Desktop dos analistas
+  Ambos:    Validação conjunta do health check e audit log
+  Ambos:    Documentar SLA de manutenção</pre>
+        </div>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-left">
+    <strong>Relatório 02 · Relatório Executivo — MCP Server</strong><br />
+    Thiago Bagdonas — IA &amp; Dados, Setter · 24/06/2026<br />
+    <a href="vps-mcp.html">← Central VPS/MCP</a> &nbsp;·&nbsp; <a href="index.html">Início</a> &nbsp;·&nbsp; <a href="relatorio-briefing-ti.html">← Briefing Técnico TI</a>
+  </div>
+  <div class="footer-right">
+    Relatório preparado por Thiago Bagdonas — IA &amp; Dados, Setter. Referência técnica: OPORD SETTER-MCP-001 v2.0 (documento interno).
+  </div>
+</footer>
+
+<button class="to-top" aria-label="Voltar ao topo" title="Voltar ao topo">↑</button>
+
+<script src="reports.js"></script>
+</body>
+</html>

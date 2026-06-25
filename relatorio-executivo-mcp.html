@@ -434,6 +434,9 @@
           <li><strong>Monitoramento:</strong> O TI já tem ferramenta de monitoramento (Zabbix, Grafana, Datadog)? Integrar ou usar alerta básico por email?</li>
           <li><strong>Janela de manutenção padrão:</strong> Qual horário é aceitável para reboots de kernel?</li>
           <li><strong>Acesso de emergência:</strong> Como documentar e compartilhar credenciais do console do provedor de forma segura?</li>
+          <li><strong>Chaves de acesso à VPS:</strong> Por qual canal seguro será feita a troca das chaves SSH (chave pública da Setter para o usuário <code>setter</code>)? Será usado cofre corporativo — qual (1Password, Bitwarden ou equivalente)?</li>
+          <li><strong>Segregação de acessos:</strong> Confirma-se o uso de usuários separados (<code>setter</code> para a Setter, <code>ti-admin</code> para o TI), sem compartilhamento de senhas de sistema entre as partes?</li>
+          <li><strong>Rotação e revogação de chaves:</strong> Qual o procedimento para revogar ou rotacionar as chaves SSH quando um colaborador sai do time ou em caso de incidente de segurança?</li>
           <li><strong>Backup offsite:</strong> O TI assume backup dos snapshots da VPS, ou IA/Dados cuida disso separadamente do backup do banco?</li>
           <li><strong>Prazo:</strong> Quando o TI consegue entregar a VPS hardened e pronta para deploy?</li>
         </ol>

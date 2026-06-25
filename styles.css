@@ -135,6 +135,33 @@ ol li { margin: 0.3rem 0; color: var(--ink-soft); }
 }
 .topnav a.nav-projects:hover { background: var(--gold-soft); color: var(--navy-deep); }
 
+/* ============ BOTÃO HAMBÚRGUER (menu mobile) ============ */
+.nav-toggle {
+  display: none;            /* oculto no desktop — só aparece em ≤1100px */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 38px;
+  padding: 9px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
 /* ============ HERO ============ */
 .hero {
   background: linear-gradient(180deg, #082619 0%, #0e3a28 100%);
@@ -1995,7 +2022,44 @@ ul li strong, ol li strong { font-weight: 600; }
   .glossary-grid { grid-template-columns: 1fr; }
   .refs-list { grid-template-columns: 1fr; }
   .fs-grid { grid-template-columns: repeat(2, 1fr); }
-  .topnav { display: none; }
+
+  /* ---- Navegação mobile: hambúrguer + painel deslizante ---- */
+  .topbar { gap: 0.9rem; }
+  .brand { flex-shrink: 1; min-width: 0; }
+  .brand-text { min-width: 0; }
+  .nav-toggle { display: flex; margin-left: auto; flex-shrink: 0; }
+  .topnav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 0.4rem 1.3rem 1.1rem;
+    box-shadow: 0 14px 28px -14px rgba(0,0,0,0.4);
+    max-height: calc(100vh - 52px);
+    overflow-y: auto;
+  }
+  .topnav.open { display: flex; }
+  .topnav a {
+    padding: 0.85rem 0.2rem;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+  .topnav a:last-child { border-bottom: none; }
+  .topnav a.nav-projects,
+  .topnav a.nav-vps {
+    text-align: center;
+    margin-top: 0.6rem;
+    padding: 0.78rem;
+    border-bottom: none;
+  }
+
   h1 { font-size: 2rem; }
   h2 { font-size: 1.55rem; }
   .section-num { position: static; display: block; margin-bottom: 0.4rem; }

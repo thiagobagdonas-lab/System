@@ -1,3 +1,24 @@
+/* ============ MENU MOBILE (hambúrguer) ============ */
+(function setupMobileNav() {
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.topnav');
+  if (!toggle || !nav) return;
+  const close = () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Abrir menu');
+  };
+  toggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+  });
+  // fecha o menu ao escolher um item
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  // fecha com ESC
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
 /* ============ TABS — onde o código executa ============ */
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {

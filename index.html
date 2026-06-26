@@ -760,32 +760,36 @@
   <h3 class="sub-h3">Cobertura do ciclo do deal</h3>
   <table class="comp-table">
     <thead>
-      <tr><th>Fase do deal</th><th>Skills · comandos rápidos</th><th>Agente · bundle</th></tr>
+      <tr><th>Fase do deal</th><th>O que a IA entrega</th><th>Agente · bundle</th></tr>
     </thead>
     <tbody>
       <tr>
         <td>Originação &amp; pitch</td>
-        <td><code>/teaser</code> <code>/cim</code> <code>/buyer-list</code> <code>/one-pager</code> <code>/process-letter</code> <code>/deal-tracker</code> · pitch-deck</td>
+        <td>Teasers, CIMs, one-pagers, listas de compradores, cartas de processo e o tracker do deal.
+          <span style="display:block;margin-top:0.4rem;font-size:0.76rem;color:rgba(255,255,255,0.5);">Por comando: <code>/teaser</code> <code>/cim</code> <code>/buyer-list</code> <code>/one-pager</code> <code>/process-letter</code> <code>/deal-tracker</code></span></td>
         <td>Pitch Agent · investment-banking</td>
       </tr>
       <tr>
         <td>Valuation &amp; modelagem</td>
-        <td><code>/comps</code> <code>/dcf</code> <code>/lbo</code> <code>/merger-model</code> <code>/returns</code> (IRR/MOIC) · 3-statement</td>
+        <td>Comps, DCF, LBO, merger model, retornos (IRR/MOIC) e 3-statement model.
+          <span style="display:block;margin-top:0.4rem;font-size:0.76rem;color:rgba(255,255,255,0.5);">Por comando: <code>/comps</code> <code>/dcf</code> <code>/lbo</code> <code>/merger-model</code> <code>/returns</code></span></td>
         <td>Model Builder · Valuation Reviewer · financial-analysis</td>
       </tr>
       <tr>
         <td>Due diligence &amp; comitê</td>
-        <td><code>/dd-checklist</code> <code>/dd-prep</code> <code>/screen-deal</code> <code>/ic-memo</code></td>
+        <td>Checklists e preparação de due diligence, screening de deals e IC memos.
+          <span style="display:block;margin-top:0.4rem;font-size:0.76rem;color:rgba(255,255,255,0.5);">Por comando: <code>/dd-checklist</code> <code>/dd-prep</code> <code>/screen-deal</code> <code>/ic-memo</code></span></td>
         <td>private-equity</td>
       </tr>
       <tr>
         <td>Research setorial</td>
-        <td>Panorama do setor, landscape competitivo e peer comps → shortlist de alvos <span style="color:rgba(255,255,255,0.5);">(skills sector-overview, idea-generation, thesis-tracker, catalyst-calendar)</span></td>
+        <td>Panorama do setor, landscape competitivo, peer comps e shortlist de alvos a partir das teses da casa.
+          <span style="display:block;margin-top:0.4rem;font-size:0.76rem;color:rgba(255,255,255,0.5);">Sem comando próprio — o agente Market Researcher executa na conversa (skills <code>sector-overview</code>, <code>idea-generation</code>, <code>thesis-tracker</code>, <code>catalyst-calendar</code>)</span></td>
         <td>Market Researcher · equity-research</td>
       </tr>
     </tbody>
   </table>
-  <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin:-0.6rem auto 0;"><code>/comando</code> = slash command direto no chat. Nomes sem barra (3-statement, pitch-deck, sector-overview…) = skills nomeadas que o agente da vertical aciona automaticamente.</p>
+  <p style="font-size:0.84rem;color:rgba(255,255,255,0.62);margin:-0.4rem auto 0;"><strong style="color:var(--gold-soft);">Como funciona na prática:</strong> em algumas fases você digita um comando direto no chat (as palavras com <code>/</code>); em outras, como o research setorial, basta descrever a tarefa e o agente da vertical aciona as skills certas sozinho. <strong>O resultado é sempre um rascunho de produto de analista para revisão humana</strong> — nunca uma recomendação de investimento ou execução de transação.</p>
 
   <h3 class="sub-h3">9 bundles verticais · cada um instala como plugin</h3>
   <p style="font-size:0.92rem;color:rgba(255,255,255,0.78);margin:0 auto 1rem;">Cada bundle empacota <strong style="color:var(--gold-soft);">skills</strong> (comandos como <code>/dcf</code>) + <strong style="color:var(--gold-soft);">agentes</strong> autônomos num pacote único. Instala como plugin no Cowork/Code ou roda via API — os três primeiros são o núcleo de M&A. <strong style="color:var(--gold-soft);">Clique em qualquer bundle</strong> para abrir sua pasta no GitHub.</p>

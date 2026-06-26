@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="hero-meta">
-      <span>IA &amp; Dados, Setter · 24/06/2026 · Classificação: Uso interno</span>
+      <span>IA &amp; Dados, Setter · 26/06/2026 (alinhado ao Briefing TI v2) · Classificação: Uso interno</span>
       <a href="#doc" class="hero-cta">Ir ao documento ↓</a>
     </div>
   </div>
@@ -182,15 +182,20 @@
         <table class="comp-table">
           <thead><tr><th>Domínio</th><th>Tarefa</th><th>Periodicidade</th></tr></thead>
           <tbody>
-            <tr><td><strong>Provisionamento</strong></td><td>Criação da VPS com Ubuntu 22.04 LTS</td><td>Uma vez</td></tr>
-            <tr><td><strong>Acesso inicial</strong></td><td>Criação do usuário <code>setter</code> com sudo, chave SSH</td><td>Uma vez</td></tr>
+            <tr><td><strong>Provisionamento</strong></td><td>Criação da VPS com Ubuntu 24.04 LTS</td><td>Uma vez</td></tr>
+            <tr><td><strong>Acesso inicial</strong></td><td>Conta de serviço <code>setter-app</code> (sem sudo) + admins <code>setter-admin</code>/<code>ti-admin</code> (com sudo), chaves SSH</td><td>Uma vez</td></tr>
+            <tr><td><strong>Docker engine</strong></td><td>Instalar e habilitar Docker (a aplicação roda em container — TI não toca no conteúdo)</td><td>Uma vez</td></tr>
             <tr><td><strong>SSH hardening</strong></td><td>Desabilitar root login, desabilitar password auth</td><td>Uma vez</td></tr>
-            <tr><td><strong>Firewall (UFW)</strong></td><td>Liberar 22/80/443, bloquear todo o resto</td><td>Uma vez</td></tr>
-            <tr><td><strong>Fail2ban</strong></td><td>Configurar banimento por tentativas SSH e nginx</td><td>Uma vez</td></tr>
-            <tr><td><strong>Certbot / TLS</strong></td><td>Emitir e renovar certificado Let's Encrypt para <code>mcp.setter.net.br</code></td><td>Automático (renovação 90 dias)</td></tr>
+            <tr><td><strong>Firewall (UFW)</strong></td><td>Liberar 22 e 51820/UDP (WireGuard); 80/443 não públicas</td><td>Uma vez</td></tr>
+            <tr><td><strong>WireGuard (VPN)</strong></td><td>Configurar túnel — único ponto de entrada público (caminho único v2)</td><td>Uma vez</td></tr>
+            <tr><td><strong>Fail2ban</strong></td><td>Configurar banimento por tentativas SSH</td><td>Uma vez</td></tr>
+            <tr><td><strong>Certbot / TLS</strong></td><td>Emitir/renovar certificado Let's Encrypt para <code>mcp.setter.net.br</code> via <strong>DNS-01</strong> (80/443 não públicas)</td><td>Automático (renovação 90 dias)</td></tr>
             <tr><td><strong>OS updates</strong></td><td><code>unattended-upgrades</code> para patches de segurança</td><td>Automático (diário)</td></tr>
-            <tr><td><strong>Monitoramento</strong></td><td>Alertas de CPU/memória/disco acima de 80%</td><td>Contínuo</td></tr>
-            <tr><td><strong>Acesso de emergência</strong></td><td>Console de recuperação via provedor (acesso out-of-band)</td><td>Sob demanda</td></tr>
+            <tr><td><strong>logrotate</strong></td><td>Rotação dos logs da aplicação (caminho fornecido pela IA/Dados)</td><td>Uma vez</td></tr>
+            <tr><td><strong>Snapshots</strong></td><td>Snapshot automático semanal via painel do provedor</td><td>Automático (semanal)</td></tr>
+            <tr><td><strong>Agendamento de backup</strong></td><td>Agendar (cron) o script de backup da IA/Dados e enviar a saída para fora da VPS</td><td>Automático (diário)</td></tr>
+            <tr><td><strong>Monitoramento</strong></td><td>Alertas de CPU/memória/disco + health check do <code>/health</code> da aplicação</td><td>Contínuo</td></tr>
+            <tr><td><strong>Acesso de emergência</strong></td><td>Console de recuperação via provedor (acesso out-of-band, com MFA)</td><td>Sob demanda</td></tr>
             <tr><td><strong>Auditoria de acesso</strong></td><td>Revisão mensal de <code>/var/log/auth.log</code> e eventos fail2ban</td><td>Mensal</td></tr>
           </tbody>
         </table>
@@ -199,10 +204,10 @@
         <table class="comp-table">
           <thead><tr><th>Domínio</th><th>Tarefa</th></tr></thead>
           <tbody>
-            <tr><td><strong>Deploy</strong></td><td>Código da aplicação, virtualenv, dependências Python</td></tr>
+            <tr><td><strong>Deploy</strong></td><td>Imagem e containers Docker, dependências Python (dentro da imagem)</td></tr>
             <tr><td><strong>Configuração da aplicação</strong></td><td>Arquivo <code>.env</code> com as API keys (posse exclusiva)</td></tr>
-            <tr><td><strong>Banco de dados</strong></td><td>Schema SQLite, backups diários, rotação de dados</td></tr>
-            <tr><td><strong>systemd service</strong></td><td>Arquivo de serviço, start/stop/restart da aplicação</td></tr>
+            <tr><td><strong>Banco de dados</strong></td><td>Schema SQLite, rotação de dados e <strong>lógica do script de backup</strong> (<code>.backup</code>/<code>.dump</code> — agendamento e envio externo são do TI)</td></tr>
+            <tr><td><strong>systemd / container</strong></td><td>Unit do serviço com <code>Restart=always</code> + proteção de crash-loop; start/stop/restart da aplicação</td></tr>
             <tr><td><strong>nginx</strong></td><td>Configuração do <code>server block</code> para o MCP</td></tr>
             <tr><td><strong>Manutenção do código</strong></td><td>Updates de versão do FastMCP, novas tools, novos scripts</td></tr>
             <tr><td><strong>API keys</strong></td><td>Geração, rotação e distribuição das chaves de autenticação</td></tr>
@@ -224,13 +229,14 @@
             <h5>IA/Dados não assume</h5>
             <ul>
               <li>Manutenção do kernel e pacotes do OS</li>
-              <li>Regras de firewall e fail2ban</li>
+              <li>Regras de firewall, fail2ban e configuração do WireGuard</li>
               <li>Renovação de certificados TLS</li>
               <li>Acesso de emergência via console do provedor</li>
             </ul>
           </div>
         </div>
         <p>Esta separação respeita o princípio de menor privilégio e garante que nenhuma das partes precisa da outra para executar suas funções rotineiras.</p>
+        <div class="rpt-note crit"><strong>Ressalva de segredos (v2):</strong> a regra "TI não acessa o <code>.env</code>" vale no sistema em execução, mas <strong>quem controla snapshots ou o console do provedor consegue ler o disco inteiro</strong> — inclusive o <code>.env</code>. Por isso a conta do provedor é tratada como superfície que carrega segredos: <strong>MFA obrigatório</strong> e credenciais em cofre. Ver Briefing TI v2, seção 7.2.</div>
       </div>
     </details>
 
@@ -253,24 +259,24 @@
             <tr><td><strong>RAM</strong></td><td>2 GB</td><td>4 GB</td></tr>
             <tr><td><strong>Disco SSD</strong></td><td>20 GB</td><td>40 GB</td></tr>
             <tr><td><strong>Rede</strong></td><td>100 Mbps</td><td>200 Mbps</td></tr>
-            <tr><td><strong>OS</strong></td><td>Ubuntu 22.04 LTS</td><td>Ubuntu 22.04 LTS</td></tr>
+            <tr><td><strong>OS</strong></td><td>Ubuntu 24.04 LTS</td><td>Ubuntu 24.04 LTS</td></tr>
             <tr><td><strong>IP</strong></td><td>1 IPv4 estático</td><td>1 IPv4 estático</td></tr>
           </tbody>
         </table>
-        <div class="rpt-note"><strong>Estimativa de custo:</strong> R$ 80–150/mês (Hetzner CX21 ou DigitalOcean equivalente). Custo aumenta apenas se SQLite ultrapassar ~50 GB — improvável no horizonte de 12 meses.</div>
+        <div class="rpt-note"><strong>Estimativa de custo:</strong> R$ 80–150/mês (Hetzner CX22 ou DigitalOcean equivalente). Custo aumenta apenas se SQLite ultrapassar ~50 GB — improvável no horizonte de 12 meses.</div>
 
         <h4>4.2 Provedor recomendado</h4>
         <ul>
-          <li><strong>Hetzner Cloud</strong> (Helsinki ou Ashburn): melhor custo-benefício, ~€4/mês para CX21</li>
+          <li><strong>Hetzner Cloud</strong> (Helsinki ou Ashburn): melhor custo-benefício, ~€4/mês para CX22</li>
           <li><strong>DigitalOcean</strong> (São Paulo): latência menor para o Brasil, ~$24/mês para Droplet equivalente</li>
         </ul>
-        <p>Ambos fornecem console out-of-band, snapshots automatizados e IPv4 estático incluso.</p>
+        <p>Ambos fornecem console out-of-band, snapshots automatizados e IPv4 estático incluso. <strong>MFA na conta do provedor é obrigatório</strong> (a conta controla snapshots e console).</p>
 
         <h4>4.3 Configuração de rede necessária</h4>
         <ul>
-          <li><strong>DNS:</strong> Registro A apontando <code>mcp.setter.net.br</code> → IP da VPS (TI ou responsável pelo DNS da Setter)</li>
-          <li><strong>Portas abertas no firewall externo:</strong> 22 (SSH), 80 (HTTP→redirect), 443 (HTTPS)</li>
-          <li><strong>Nenhuma outra porta deve ser exposta</strong> — o processo Python escuta exclusivamente em <code>127.0.0.1:8000</code></li>
+          <li><strong>DNS:</strong> o TI confirma e entrega o IP estático; o time interno da Setter cria o registro A <code>mcp.setter.net.br</code> → IP da VPS (o TI não acessa o painel DNS da Setter)</li>
+          <li><strong>Portas abertas no firewall externo:</strong> 22 (SSH) e 51820/UDP (WireGuard) — <strong>80/443 não são públicas</strong> (acesso via túnel)</li>
+          <li><strong>Nenhuma outra porta deve ser exposta</strong> — o processo da aplicação escuta exclusivamente em <code>127.0.0.1:8000</code> e só é alcançável via VPN</li>
         </ul>
       </div>
     </details>
@@ -291,11 +297,13 @@
           <div class="snippet-label">diagrama · camadas</div>
           <pre>Internet
    │
-   ├─ [UFW] Bloqueia tudo exceto 22/80/443
+   ├─ [UFW] Bloqueia tudo exceto 22 (SSH) e 51820/UDP (WireGuard)
    │
-   ├─ [Fail2ban] Bane IPs após 3 falhas SSH / 5 falhas HTTP em 10 min
+   ├─ [WireGuard] Único ponto de entrada público; app só alcançável pelo túnel
    │
-   ├─ [nginx] TLS 1.2+, HSTS, rate limiting (10 req/s), sem buffering
+   ├─ [Fail2ban] Bane IPs após 3 falhas SSH em 10 min
+   │
+   ├─ [nginx] TLS 1.2+, HSTS, rate limiting no endpoint do MCP (10 req/s)
    │
    ├─ [FastMCP + StaticTokenVerifier] Bearer token obrigatório por tier
    │       ├─ Tier read  → analistas (consultas)
@@ -334,19 +342,21 @@
         <span class="rpt-sec-toggle">+</span>
       </summary>
       <div class="rpt-sec-body">
-        <p>Ao final do provisionamento, o TI deve entregar à área de IA/Dados:</p>
+        <p>Ao final do provisionamento, o TI deve entregar à área de IA/Dados. Esta é a versão resumida — o checklist completo e canônico está no <a class="rpt-xref" href="relatorio-briefing-ti.html#sec-8">Briefing TI v2, seção 8</a>:</p>
         <ul class="rpt-checklist">
-          <li>IP público da VPS e acesso SSH com usuário <code>setter</code> + chave pública registrada</li>
-          <li>Confirmação de que <code>root</code> login está desabilitado via SSH</li>
-          <li>Confirmação de que autenticação por senha está desabilitada</li>
-          <li>UFW ativo com regras 22/80/443 — status via <code>sudo ufw status verbose</code></li>
+          <li>VPS com <strong>Ubuntu 24.04 LTS</strong>, IP estático e <strong>MFA ativo na conta do provedor</strong></li>
+          <li>Conta de serviço <code>setter-app</code> (sem sudo, fora do grupo docker) + admins <code>setter-admin</code>/<code>ti-admin</code></li>
+          <li>Confirmação de que <code>root</code> login e autenticação por senha estão desabilitados</li>
+          <li>UFW ativo — somente 22 e 51820/UDP; <strong>80/443 não públicas</strong> (<code>sudo ufw status verbose</code>)</li>
           <li>Fail2ban ativo — status via <code>sudo fail2ban-client status</code></li>
           <li><code>unattended-upgrades</code> configurado e ativo</li>
-          <li>Registro DNS <code>mcp.setter.net.br → IP</code> propagado (verificar via <code>dig mcp.setter.net.br +short</code>)</li>
-          <li>Certbot instalado (<code>python3-certbot-nginx</code>)</li>
-          <li>nginx instalado e rodando (sem <code>server block</code> configurado — isso é responsabilidade da IA/Dados)</li>
-          <li>Monitoramento de CPU/RAM/disco configurado com alerta para <code>thiago.bagdonas@setter.net.br</code></li>
-          <li>Acesso out-of-band (console do provedor) documentado e compartilhado com IA/Dados em canal seguro</li>
+          <li><strong>Docker</strong> instalado e ativo; <strong>WireGuard</strong> ativo com peer de teste validado</li>
+          <li>Registro DNS <code>mcp.setter.net.br → IP</code> propagado (criado pela Setter)</li>
+          <li>Certbot instalado e renovação por <strong>DNS-01</strong> validada</li>
+          <li>nginx instalado e rodando (sem <code>server block</code> — isso é responsabilidade da IA/Dados)</li>
+          <li><code>logrotate</code>, <strong>monitor de saúde do <code>/health</code></strong>, <strong>backup do banco agendado + envio externo + teste de restauração</strong> e <strong>snapshot semanal</strong> configurados</li>
+          <li>Monitoramento de CPU/RAM/disco com alerta para <strong>canal/lista compartilhada</strong> da IA/Dados (não e-mail pessoal único)</li>
+          <li>Documento <strong>as-built</strong> e acesso out-of-band documentados e compartilhados em cofre</li>
         </ul>
       </div>
     </details>
@@ -365,7 +375,10 @@
         <h4>Rotina automática (sem intervenção manual esperada)</h4>
         <ul>
           <li><strong>Patches de segurança:</strong> <code>unattended-upgrades</code> aplica automaticamente patches do kernel e pacotes críticos</li>
-          <li><strong>Renovação TLS:</strong> Certbot renova o certificado a cada 60–90 dias via <code>cron</code> — falha gera alerta</li>
+          <li><strong>Renovação TLS:</strong> Certbot renova o certificado a cada 60–90 dias via <code>cron</code>, usando <strong>DNS-01</strong> (80/443 não públicas) — falha gera alerta</li>
+          <li><strong>Backup do banco:</strong> script da IA/Dados executado por <code>cron</code> e enviado para fora da VPS — falha gera alerta</li>
+          <li><strong>Snapshot:</strong> imagem semanal do host via painel do provedor (complementa, não substitui o backup do banco)</li>
+          <li><strong>logrotate + health check:</strong> logs rotacionados; <code>/health</code> monitorado, com alerta à IA/Dados se a aplicação não responder</li>
           <li><strong>Fail2ban:</strong> opera de forma autônoma, bane e desbane IPs conforme regras configuradas</li>
         </ul>
 
@@ -383,8 +396,8 @@
           <li>TI notifica IA/Dados com 24h de antecedência</li>
           <li>IA/Dados confirma janela de manutenção (evitar horário comercial)</li>
           <li>TI executa <code>sudo reboot</code></li>
-          <li>systemd reinicia automaticamente o serviço MCP após o boot</li>
-          <li>IA/Dados confirma que <code>GET https://mcp.setter.net.br/health</code> retorna <code>{"status":"ok"}</code></li>
+          <li>systemd reinicia automaticamente o serviço MCP após o boot — <strong>desde que a unit tenha <code>Restart=always</code></strong> + proteção de crash-loop (validado no checklist)</li>
+          <li>Validação de saúde: no host via <code>curl http://127.0.0.1:8000/health</code> e, de fora, conectado ao túnel (<code>GET</code> pelo IP do WireGuard) — a URL pública não responde fora da VPN</li>
         </ol>
       </div>
     </details>
@@ -427,6 +440,7 @@
         <span class="rpt-sec-toggle">+</span>
       </summary>
       <div class="rpt-sec-body">
+        <div class="rpt-note crit"><strong>Já decidido na v2 do Briefing TI:</strong> base <strong>Ubuntu 24.04</strong>, arquitetura em <strong>Docker</strong>, VPN via <strong>WireGuard</strong> (caminho único), DNS criado pela Setter, e o <strong>backup do banco</strong> (TI agenda o script da IA/Dados + envio externo; snapshot semanal obrigatório do TI). Os itens abaixo riscados deixam de ser pergunta.</div>
         <p>Itens a definir durante a conversa com o TI:</p>
         <ol>
           <li><strong>Provedor:</strong> Hetzner ou DigitalOcean? Há preferência ou contrato existente?</li>
@@ -435,12 +449,12 @@
           <li><strong>Monitoramento:</strong> O TI já tem ferramenta de monitoramento (Zabbix, Grafana, Datadog)? Integrar ou usar alerta básico por email?</li>
           <li><strong>Janela de manutenção padrão:</strong> Qual horário é aceitável para reboots de kernel?</li>
           <li><strong>Acesso de emergência:</strong> Como documentar e compartilhar credenciais do console do provedor de forma segura?</li>
-          <li><strong>Chaves de acesso à VPS:</strong> Por qual canal seguro será feita a troca das chaves SSH (chave pública da Setter para o usuário <code>setter</code>)? Será usado cofre corporativo — qual (1Password, Bitwarden ou equivalente)?</li>
-          <li><strong>Segregação de acessos:</strong> Confirma-se o uso de usuários separados (<code>setter</code> para a Setter, <code>ti-admin</code> para o TI), sem compartilhamento de senhas de sistema entre as partes?</li>
+          <li><strong>Chaves de acesso à VPS:</strong> Por qual canal seguro será feita a troca das chaves SSH (chave pública da Setter para o usuário <code>setter-admin</code>)? Será usado cofre corporativo — qual (1Password, Bitwarden ou equivalente)?</li>
+          <li><strong>Segregação de acessos:</strong> Confirma-se o uso de contas separadas — <code>setter-app</code> (serviço, sem sudo), <code>setter-admin</code> (Setter) e <code>ti-admin</code> (TI) — sem compartilhamento de senhas de sistema entre as partes?</li>
           <li><strong>Rotação, revogação de chaves e offboarding:</strong> Qual o procedimento para revogar as chaves SSH quando um técnico do TI (ou colaborador da Setter) com acesso ao servidor sai da empresa, ou em caso de incidente? Pode ser simples, mas precisa existir — e incluir trilha de <strong>auditoria de acesso</strong> (quem acessou, quando).</li>
-          <li><strong>Restrições de rede nas máquinas dos analistas (VPN):</strong> Se WireGuard for adotado, o túnel usa <code>UDP</code> na porta <code>51820</code> — firewalls corporativos costumam bloquear UDP não-padrão. Confirmar <em>antes da reunião</em> se as redes gerenciadas pelo TI deixam esse tráfego passar; caso contrário, a decisão de arquitetura muda para <code>Tailscale</code> ou sem VPN.</li>
+          <li><strong>Restrições de rede nas máquinas dos analistas (VPN):</strong> WireGuard <strong>já foi adotado (v2)</strong>; o túnel usa <code>UDP</code> na porta <code>51820</code> e firewalls corporativos costumam bloquear UDP não-padrão. Resta confirmar se as redes gerenciadas pelo TI deixam esse tráfego passar — esse é o único ponto de entrada da aplicação.</li>
           <li><strong>Instalação do cliente VPN nos analistas:</strong> Se houver VPN, quem instala e configura o cliente (<code>WireGuard</code> ou <code>Tailscale</code>) em cada máquina? Se o TI gerencia os endpoints dos analistas, é responsabilidade do TI; se os analistas gerenciam as próprias máquinas, cai para IA/Dados. Sem isso definido, o servidor fica pronto mas ninguém consegue se conectar.</li>
-          <li><strong>Backup offsite:</strong> O TI assume backup dos snapshots da VPS, ou IA/Dados cuida disso separadamente do backup do banco?</li>
+          <li><del><strong>Backup offsite:</strong> O TI assume backup dos snapshots da VPS, ou IA/Dados cuida disso separadamente do backup do banco?</del> <strong>— Resolvido na v2:</strong> snapshot semanal é obrigação do TI; o backup do banco usa script da IA/Dados (<code>.backup</code>/<code>.dump</code>) agendado pelo TI via cron e enviado para fora da VPS, com teste de restauração trimestral (RPO ≤ 24h / RTO ≤ 4h). Resta confirmar o destino externo.</li>
           <li><strong>Prazo:</strong> Quando o TI consegue entregar a VPS hardened e pronta para deploy?</li>
         </ol>
       </div>
@@ -460,20 +474,22 @@
         <div class="snippet">
           <div class="snippet-label">cronograma · 3 semanas</div>
           <pre>Semana 1
-  TI:       Provisionar VPS, hardening SSH, UFW, Fail2ban, unattended-upgrades
-  TI:       Configurar DNS mcp.setter.net.br
-  TI:       Instalar nginx e Certbot (sem server block)
-  TI:       Entrega do checklist (seção 6) para IA/Dados
+  TI:       Provisionar VPS (24.04), MFA no provedor, contas (setter-app/admins)
+  TI:       Hardening SSH, UFW (22 + 51820/UDP), Fail2ban, unattended-upgrades
+  TI:       Instalar Docker, nginx, Certbot (DNS-01) e configurar WireGuard
+  Setter:   Criar registro A mcp.setter.net.br (TI entrega o IP)
+  TI:       logrotate, snapshot semanal, agendamento de backup + envio externo
+  TI:       Entrega do checklist (seção 6) + documento as-built para IA/Dados
 
 Semana 2
-  IA/Dados: Deploy da aplicação, nginx server block, TLS, systemd service
-  IA/Dados: Testes com MCP Inspector
-  IA/Dados: Integração com Claude Code (admin)
+  IA/Dados: Deploy da aplicação (container Docker), nginx server block, TLS
+  IA/Dados: Unit com Restart=always; script de backup (.backup/.dump)
+  IA/Dados: Testes com MCP Inspector; integração com Claude Code (admin)
 
 Semana 3
-  IA/Dados: Integração com Claude Desktop dos analistas
-  Ambos:    Validação conjunta do health check e audit log
-  Ambos:    Documentar SLA de manutenção</pre>
+  IA/Dados: Integração com Claude Desktop dos analistas (peers WireGuard)
+  Ambos:    Validação conjunta: health check, teste de restauração, kill do processo
+  Ambos:    Confirmar SLA de manutenção (seção 9 do Briefing TI v2)</pre>
         </div>
       </div>
     </details>
@@ -485,7 +501,7 @@ Semana 3
 <footer class="footer">
   <div class="footer-left">
     <strong>Relatório 02 · Relatório Executivo — MCP Server</strong><br />
-    IA &amp; Dados, Setter · 24/06/2026<br />
+    IA &amp; Dados, Setter · 26/06/2026 (alinhado ao Briefing TI v2)<br />
     <a href="vps-mcp.html">← Central VPS/MCP</a> &nbsp;·&nbsp; <a href="index.html">Início</a> &nbsp;·&nbsp; <a href="relatorio-briefing-ti.html">← Briefing Técnico TI</a>
   </div>
   <div class="footer-right">

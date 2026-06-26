@@ -388,7 +388,7 @@ APT::Periodic::Unattended-Upgrade "1";</pre>
         <div class="snippet">
           <div class="snippet-label">bash · cron de health check (rodando no host, contra o loopback)</div>
           <pre># a cada 5 min: bate no /health e alerta a Setter se falhar 2x seguidas
-*/5 * * * * curl -fsS --max-time 10 http://127.0.0.1:PORTA/health \
+*/5 * * * * curl -fsS --max-time 10 http://127.0.0.1:8000/health \
   || /usr/local/bin/alerta-setter.sh "Aplicação não respondeu ao /health"</pre>
         </div>
         <p>Alternativa: um monitor externo (UptimeRobot ou equivalente) configurado como <strong>peer do túnel</strong>, batendo no endpoint via IP do WireGuard. A Setter define o caminho exato do <code>/health</code>; o TI implementa o monitor e o alerta.</p>
@@ -421,7 +421,7 @@ APT::Periodic::Unattended-Upgrade "1";</pre>
 
 location /mcp/ {
     limit_req zone=mcp burst=20 nodelay;
-    proxy_pass http://127.0.0.1:PORTA;
+    proxy_pass http://127.0.0.1:8000;
 }</pre>
         </div>
       </div>
@@ -490,7 +490,7 @@ systemctl start wg-quick@wg0</pre>
         <h4>5.5 Validação de saúde por cenário</h4>
         <p>O health check da v1 (<code>curl https://[subdomínio]/health</code> de fora) não funciona atrás da VPN. Validação definida:</p>
         <ul>
-          <li><strong>No host:</strong> <code>curl -fsS http://127.0.0.1:PORTA/health</code> (usado pelo cron de 4.7 e pós-reboot).</li>
+          <li><strong>No host:</strong> <code>curl -fsS http://127.0.0.1:8000/health</code> (usado pelo cron de 4.7 e pós-reboot).</li>
           <li><strong>De fora (analista/monitor):</strong> conectar ao túnel e bater no IP interno — <code>curl -fsS https://10.10.0.1/health</code> ou no subdomínio que resolve para o IP do túnel.</li>
         </ul>
 
@@ -572,7 +572,7 @@ systemctl start wg-quick@wg0</pre>
           <li>Notificar a Setter com mínimo 24h de antecedência</li>
           <li>Aguardar confirmação da janela de manutenção</li>
           <li>Executar o reboot</li>
-          <li>Confirmar que a aplicação responde no host: <code>curl -fsS http://127.0.0.1:PORTA/health</code> e que <code>wg-quick@wg0</code> subiu</li>
+          <li>Confirmar que a aplicação responde no host: <code>curl -fsS http://127.0.0.1:8000/health</code> e que <code>wg-quick@wg0</code> subiu</li>
         </ol>
         <div class="rpt-note crit"><strong>Resiliência da aplicação (corrigido na v2):</strong> a afirmação "a aplicação reinicia sozinha" só é verdadeira se a unit systemd / política do container tiver <code>Restart=always</code> + <code>StartLimitIntervalSec</code> (proteção contra crash-loop). A configuração da unit é da Setter; a <strong>validação</strong> (matar o processo e confirmar que volta sozinho) entra no checklist de entrega — ver <a class="rpt-xref" href="#sec-8">seção 8</a>.</div>
 
